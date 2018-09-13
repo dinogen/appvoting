@@ -1,0 +1,24 @@
+{% extends "base_template.html" %} {% block body %}
+
+
+<h2>Votation list</h2>
+<table>
+<thead>
+    <th>Votation ID</th>
+    <th>Description</th>
+    <th>Begin</th>
+    <th>End</th>
+</thead>
+<tbody>
+    {% for v in votations_array %}
+    <tr>
+        <td>{{v.votation_id}}</td>
+        <td>{{v.votation_description}}</td>
+        <td>{{v.begin_date}}</td>
+        <td>{{v.end_date}}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+
+{% endblock %}

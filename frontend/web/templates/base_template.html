@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Voting sistem</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="refresh" content="150" />
+</head>
+
+<body>
+    <div style="margin-left:20%; margin-right:20%; ">
+        {% if current_user.is_authenticated %} Hi, {{current_user.user_name}}, (
+        <a href="/logout">logout</a>) (
+        <a href="/">Home</a>) {% else %} Please,
+        <a href="/login">login</a>
+        {% endif %}
+
+        <div>
+            <h1>{{pagetitle}}</h1>
+            <div>
+                {% block body %}{% endblock %}
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

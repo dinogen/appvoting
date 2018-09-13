@@ -1,0 +1,17 @@
+{% extends "base_template.html" %} {% block body %} {% if current_user.is_authenticated %} You are logged as {{ current_user.user_name
+}}. {% else %}
+<form action="login" method="post">
+  <h2>Please sign in</h2>
+  <div>
+    Username
+    <input type="text" id="user_name" name="user_name" autofocus>
+  </div>
+  <div>
+    Password
+    <input type="password" id="pass_word" name="pass_word">
+  </div>
+  <div>
+    <input type="submit" value="Sign In"/>
+  </div>
+</form>
+{% endif %} {% endblock %}
