@@ -1,4 +1,3 @@
-votation_test.py
-user_test.py
-candidate_test.py
+test_suite.py
+
 pause
