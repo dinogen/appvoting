@@ -1,4 +1,4 @@
 VER=$1
-docker build -t test-microservizi:$VER .
+docker build -t voting:$VER .
 
-docker run -p 5000:5000 test-microservizi:$VER
+docker run -p 5000:5000 -v /opt/voting:/opt/voting voting:$VER
