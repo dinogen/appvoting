@@ -2,6 +2,7 @@ from flask import Flask, render_template,request,redirect,url_for
 from flask_login import LoginManager, login_required, current_user,login_user,logout_user
 import user
 import votation
+import candidate
 
 app = Flask(__name__)
 app.secret_key = "marcello ciao"
@@ -61,12 +62,32 @@ def votation_list():
     votations_array = votation.load_votations()
     return render_template('votation_list_template.html', pagetitle="Votation List", votations_array=votations_array)
 
+@app.route("/be_a_candidate/<votation_id>")
+@login_required
+def be_a_candidate(votation_id):
+    v = votation.load_votation_by_id(votation_id)
+    return render_template('be_a_candidate_template.html', pagetitle="Candidate confirm", v=v)
 
+@app.route("/be_a_candidate_confirm")
+@login_required
+def be_a_candidate_confirm():
+    votation_id = request.args.get('votation_id')
+    v = votation.load_votation_by_id(votation_id)
+    msg = "Now, you are a candidate"
+    o = candidate.candidate_dto()
+    app.logger.info(o)
+    o.votation_id = votation_id
+    o.user_id = current_user.u.user_id
+    error = candidate.validate_dto(o)
+    if error == 0:
+        candidate.insert_dto(o)
+    else:
+        msg = candidate.error_messages[error]
+    return render_template('be_a_candidate_confirm_template.html', pagetitle="Candidate confirm", v=v,msg=msg)
 
 @login_manager.unauthorized_handler
 def unauthorized():
     return redirect(url_for('login'))
-
 
 if __name__ == '__main__':
     app.run(debug=True) 

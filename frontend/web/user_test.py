@@ -46,6 +46,9 @@ class user_test(unittest.TestCase):
         self.assertEqual(u.user_name, u1.user_name)
         self.assertEqual(u.pass_word, u1.pass_word)
         user.delete_user_by_id(u.user_id)
+    def test_load_by_id(self):
+        self.assertIsNone(user.load_user_by_id(999))
+        
 
 if __name__ == '__main__':
     unittest.main()

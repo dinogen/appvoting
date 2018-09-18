@@ -8,6 +8,8 @@
     <th>Description</th>
     <th>Begin</th>
     <th>End</th>
+    <th>&nbsp;</th>
+    <th>&nbsp;</th>
 </thead>
 <tbody>
     {% for v in votations_array %}
@@ -16,6 +18,8 @@
         <td>{{v.votation_description}}</td>
         <td>{{v.begin_date}}</td>
         <td>{{v.end_date}}</td>
+        <td><a href="/be_a_candidate/{{v.votation_id}}">Be a candidate</a></td>
+        <td><a href="">Be a guarantor</a></td>
     </tr>
     {% endfor %}
 </tbody>
