@@ -12,19 +12,24 @@ class candidate_dto:
         self.user_id = None
 
 def load_candidate_by_votation(votation_id):
-    """Returns a votation_dto object or None"""
-    o = None
+    """Returns a user_dto array"""
+    ar = []
     conn = dbmanager.get_connection()
     c = conn.cursor()
-    c.execute("select * from candidate where votation_id = ?", (votation_id,) )
+    c.execute("""select u.* 
+from candidate c, voting_user u 
+where c.votation_id = ? 
+  and c.user_id = u.user_id""", (votation_id,) )
     row = c.fetchone()
-    if row:
-        o = candidate_dto()
-        o.votation_id = row['votation_id']
+    while row:
+        o = user.user_dto()
         o.user_id = row['user_id']
+        o.user_name = row['user_name']
+        ar.append(o)
+        row = c.fetchone()
     c.close()
     conn.close()
-    return o
+    return ar
 
 def check_for_duplicate(o):
     """Returns true/false"""

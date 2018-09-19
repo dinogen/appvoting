@@ -113,6 +113,18 @@ def be_a_guarantor_confirm():
         msg = guarantor.error_messages[error]
     return render_template('be_a_guarantor_confirm_template.html', pagetitle="Guarantor confirm", v=v,msg=msg)
 
+@app.route("/votation_detail/<int:votation_id>")
+@login_required
+def votation_detail(votation_id):
+    v = votation.load_votation_by_id(votation_id)
+    candidates_array = candidate.load_candidate_by_votation(votation_id)
+    guarantors_array = guarantor.load_guarantor_by_votation(votation_id)
+    return render_template('votation_detail_template.html', pagetitle="Votation detail", \
+    v=v, candidates_array=candidates_array, guarantors_array=guarantors_array)
+
+
+
+
 @login_manager.unauthorized_handler
 def unauthorized():
     return redirect(url_for('login'))

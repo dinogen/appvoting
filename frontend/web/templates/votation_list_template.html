@@ -14,7 +14,7 @@
 <tbody>
     {% for v in votations_array %}
     <tr>
-        <td>{{v.votation_id}}</td>
+        <td><a href="/votation_detail/{{v.votation_id}}">{{v.votation_id}}</a></td>
         <td>{{states[v.votation_status]}}</td>
         <td>{{v.votation_description}}</td>
         <td>{{v.begin_date}}</td>
