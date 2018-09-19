@@ -11,7 +11,8 @@ create table votation
     votation_description text,
     begin_date date,
     end_date date,
-    votation_type text
+    votation_type text,
+    votation_status integer
 );
 
 create table guarantor
@@ -47,7 +48,8 @@ INSERT INTO votation
     votation_description,
     begin_date,
     end_date,
-    votation_type
+    votation_type,
+    votation_status
     )
 VALUES
     (
@@ -55,5 +57,6 @@ VALUES
         'votation test',
         '2018-01-01',
         '2018-01-15',
-        'random'
+        'random',
+        1
                      );

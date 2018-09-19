@@ -52,17 +52,20 @@ def votation_propose():
         v.end_date = request.form['end_date']
         v.votation_type = request.form['votation_type']
         v.promoter_user_id = current_user.u.user_id
+        v.votation_status = votation.STATUS_WAIT_FOR_CAND_AND_GUAR
         result, message = votation.validate_dto(v)
         if result:
             votation.insert_votation_dto(v)
             message = "Your votation is saved"
-    return render_template('votation_propose_template.html', pagetitle="Votation Propose", votation_obj=v, message=message)
+    return render_template('votation_propose_template.html', pagetitle="Start a Votation", \
+    votation_obj=v, message=message)
 
 @app.route("/votation_list", methods=['GET', 'POST'])
 @login_required
 def votation_list():
     votations_array = votation.load_votations()
-    return render_template('votation_list_template.html', pagetitle="Votation List", votations_array=votations_array)
+    return render_template('votation_list_template.html', pagetitle="Votation List", \
+    votations_array=votations_array,states=votation.states)
 
 @app.route("/be_a_candidate/<int:votation_id>")
 @login_required

@@ -5,6 +5,22 @@ import re
 from datetime import date
 import user
 
+STATUS_WAIT_FOR_CAND_AND_GUAR = 0
+STATUS_WAIT_FOR_GUAR_HASHES = 1
+STATUS_WAIT_FOR_CAND_KEYS = 2
+STATUS_WAIT_FOR_GUAR_KEYS = 3
+STATUS_CALCULATION = 4
+STATUS_ENDED = 5
+STATUS_FAILED = 6
+states = [ \
+"Waiting for candidates and guarantors" , \
+"Waiting for guarantors hashes" , \
+"Waiting for candidates keys" , \
+"Waiting for guarantors keys" , \
+"Elaboration" , \
+"Ended" , \
+"Failed" , \
+]
 class votation_dto:
     """DTO class for the database table"""
     def __init__(self):
@@ -14,6 +30,7 @@ class votation_dto:
         self.begin_date = None
         self.end_date = None
         self.votation_type = None 
+        self.votation_status = None 
 
 def get_blank_dto():
     v = votation_dto()
@@ -23,6 +40,7 @@ def get_blank_dto():
     v.begin_date = ''
     v.end_date = ''
     v.votation_type = ''
+    v.votation_status = 0
     return v 
     
 
@@ -41,6 +59,7 @@ def load_votation_by_id(votation_id):
         v.begin_date = row['begin_date']
         v.end_date = row['end_date']
         v.votation_type = row['votation_type']
+        v.votation_status = row['votation_status']
     c.close()
     conn.close()
     return v
@@ -61,6 +80,7 @@ def load_votations():
         v.begin_date = row['begin_date']
         v.end_date = row['end_date']
         v.votation_type = row['votation_type']
+        v.votation_status = row['votation_status']
         ar.append(v)
         row = c.fetchone()
     c.close()
@@ -82,6 +102,7 @@ def load_votations_by_promoter_user_id(promoter_user_id):
         v.begin_date = row['begin_date']
         v.end_date = row['end_date']
         v.votation_type = row['votation_type']
+        v.votation_status = row['votation_status']
         ar.append(v)
         row = c.fetchone()
     c.close()
@@ -97,7 +118,8 @@ def insert_votation_dto(v):
                     votation_description, 
                     begin_date, 
                     end_date, 
-                    votation_type) values(?,?,?,?,?)""",(v.promoter_user_id, v.votation_description, v.begin_date, v.end_date, v.votation_type) )
+                    votation_type,
+                    votation_status) values(?,?,?,?,?,?)""",(v.promoter_user_id, v.votation_description, v.begin_date, v.end_date, v.votation_type,v.votation_status) )
     v.votation_id = c.lastrowid
     c.close()
     conn.close()
@@ -134,6 +156,10 @@ def validate_dto(v):
         if v.votation_type != 'random' and v.votation_type != 'majority':
             result = False
             errorMessage = "Votation Type not valid"
+    if result:
+        if v.votation_status >= STATUS_WAIT_FOR_CAND_AND_GUAR and v.votation_type <= STATUS_OVERDUE:
+            result = False
+            errorMessage = "Status not valid"
     return (result, errorMessage)
             
 

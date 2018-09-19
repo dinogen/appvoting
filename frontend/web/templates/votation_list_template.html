@@ -1,10 +1,10 @@
 {% extends "base_template.html" %} {% block body %}
 
 
-<h2>Votation list</h2>
 <table>
 <thead>
-    <th>Votation ID</th>
+    <th>ID</th>
+    <th>Status</th>
     <th>Description</th>
     <th>Begin</th>
     <th>End</th>
@@ -15,6 +15,7 @@
     {% for v in votations_array %}
     <tr>
         <td>{{v.votation_id}}</td>
+        <td>{{states[v.votation_status]}}</td>
         <td>{{v.votation_description}}</td>
         <td>{{v.begin_date}}</td>
         <td>{{v.end_date}}</td>
