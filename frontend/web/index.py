@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template,request,redirect,url_for
 from flask_login import LoginManager, login_required, current_user,login_user,logout_user
 import user
@@ -6,7 +7,7 @@ import candidate
 import guarantor
 
 app = Flask(__name__)
-app.secret_key = "marcello ciao"
+app.secret_key = os.urandom(24) 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -45,7 +46,7 @@ def votation_propose():
     v = votation.get_blank_dto()
     message = "Please insert data"
     if request.method == 'POST':    
-        v.votation_id = request.form['votation_id']
+        #v.votation_id = request.form['votation_id']
         v.votation_description = request.form['votation_description']
         v.begin_date = request.form['begin_date']
         v.end_date = request.form['end_date']
@@ -63,13 +64,13 @@ def votation_list():
     votations_array = votation.load_votations()
     return render_template('votation_list_template.html', pagetitle="Votation List", votations_array=votations_array)
 
-@app.route("/be_a_candidate/<votation_id>")
+@app.route("/be_a_candidate/<int:votation_id>")
 @login_required
 def be_a_candidate(votation_id):
     v = votation.load_votation_by_id(votation_id)
     return render_template('be_a_candidate_template.html', pagetitle="Candidate confirm", v=v)
 
-@app.route("/be_a_guarantor/<votation_id>")
+@app.route("/be_a_guarantor/<int:votation_id>")
 @login_required
 def be_a_guarantor(votation_id):
     v = votation.load_votation_by_id(votation_id)
@@ -78,7 +79,7 @@ def be_a_guarantor(votation_id):
 @app.route("/be_a_candidate_confirm")
 @login_required
 def be_a_candidate_confirm():
-    votation_id = request.args.get('votation_id')
+    votation_id = int(request.args.get('votation_id'))
     v = votation.load_votation_by_id(votation_id)
     msg = "Now, you are a candidate"
     o = candidate.candidate_dto()
@@ -95,7 +96,7 @@ def be_a_candidate_confirm():
 @app.route("/be_a_guarantor_confirm")
 @login_required
 def be_a_guarantor_confirm():
-    votation_id = request.args.get('votation_id')
+    votation_id = int(request.args.get('votation_id'))
     v = votation.load_votation_by_id(votation_id)
     msg = "Now, you are a guarantor"
     o = guarantor.guarantor_dto()

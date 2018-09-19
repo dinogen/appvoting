@@ -19,7 +19,7 @@ def load_guarantor_by_votation(votation_id):
     c.execute("select * from guarantor where votation_id = ?", (votation_id,) )
     row = c.fetchone()
     if row:
-        o = candidate_dto()
+        o = guarantor_dto()
         o.votation_id = row['votation_id']
         o.user_id = row['user_id']
     c.close()

@@ -17,7 +17,7 @@ class votation_dto:
 
 def get_blank_dto():
     v = votation_dto()
-    v.votation_id = ''
+    v.votation_id = 0
     v.promoter_user_id = 0
     v.votation_description = ''
     v.begin_date = ''
@@ -93,12 +93,12 @@ def insert_votation_dto(v):
     conn = dbmanager.get_connection()
     c = conn.cursor()
     c.execute("""insert into votation(
-                    votation_id, 
                     promoter_user_id, 
                     votation_description, 
                     begin_date, 
                     end_date, 
-                    votation_type) values(?,?,?,?,?,?)""",(v.votation_id, v.promoter_user_id, v.votation_description, v.begin_date, v.end_date, v.votation_type) )
+                    votation_type) values(?,?,?,?,?)""",(v.promoter_user_id, v.votation_description, v.begin_date, v.end_date, v.votation_type) )
+    v.votation_id = c.lastrowid
     c.close()
     conn.close()
         
@@ -114,10 +114,6 @@ def validate_dto(v):
     """Validate data for writing in DB. Returns (True/False, "Error message")"""
     result = True
     errorMessage = "Data validated"
-    if result:
-        if not validate_votation_id(v.votation_id):
-            result = False
-            errorMessage = "Votation id not valid"
     if result:
         if user.load_user_by_id(v.promoter_user_id) == None:
             result = False
@@ -138,18 +134,8 @@ def validate_dto(v):
         if v.votation_type != 'random' and v.votation_type != 'majority':
             result = False
             errorMessage = "Votation Type not valid"
-    if result:
-        if load_votation_by_id(v.votation_id):
-            result = False
-            errorMessage = "Votation Id is a duplicate"
     return (result, errorMessage)
             
-
-def validate_votation_id(votation_id):
-    if len(votation_id.strip())==0:
-        return False
-    match_obj = re.fullmatch("[a-zA-Z0-9.]+", votation_id)
-    return match_obj != None
 
 def validate_string_date(d):
     result = True

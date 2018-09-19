@@ -6,7 +6,7 @@ create table voting_user (
 
 create table votation
 (
-    votation_id text primary key,
+    votation_id integer primary key autoincrement,
     promoter_user_id integer,
     votation_description text,
     begin_date date,
@@ -16,14 +16,14 @@ create table votation
 
 create table guarantor
 (
-    votation_id text,
+    votation_id integer,
     user_id integer,
     primary key (votation_id, user_id)
 );
 
 create table candidate
 (
-    votation_id text,
+    votation_id integer,
     user_id integer,
     primary key (votation_id, user_id)
 );
@@ -43,7 +43,6 @@ values
 
 INSERT INTO votation
     (
-    votation_id,
     promoter_user_id,
     votation_description,
     begin_date,
@@ -52,10 +51,9 @@ INSERT INTO votation
     )
 VALUES
     (
-        'test.id',
         '1',
-        'votation_description',
+        'votation test',
         '2018-01-01',
-        '2018-01-01',
+        '2018-01-15',
         'random'
                      );
