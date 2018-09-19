@@ -1,0 +1,9 @@
+{% extends "base_template.html" %} {% block body %}
+<h2>Click the button to became a guarantor.</h2>
+Do you confirm to be a guarantor for: <b>{{v.votation_description}}</b>?
+<form action="/be_a_guarantor_confirm" method="GET">
+    <input type="submit" value="Confirm" />
+    <input type="hidden" name="votation_id" value="{{v.votation_id}}">
+</form>
+
+{% endblock %}

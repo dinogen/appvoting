@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_required, current_user,login_user,lo
 import user
 import votation
 import candidate
+import guarantor
 
 app = Flask(__name__)
 app.secret_key = "marcello ciao"
@@ -68,6 +69,12 @@ def be_a_candidate(votation_id):
     v = votation.load_votation_by_id(votation_id)
     return render_template('be_a_candidate_template.html', pagetitle="Candidate confirm", v=v)
 
+@app.route("/be_a_guarantor/<votation_id>")
+@login_required
+def be_a_guarantor(votation_id):
+    v = votation.load_votation_by_id(votation_id)
+    return render_template('be_a_guarantor_template.html', pagetitle="Guarantor confirm", v=v)
+
 @app.route("/be_a_candidate_confirm")
 @login_required
 def be_a_candidate_confirm():
@@ -84,6 +91,23 @@ def be_a_candidate_confirm():
     else:
         msg = candidate.error_messages[error]
     return render_template('be_a_candidate_confirm_template.html', pagetitle="Candidate confirm", v=v,msg=msg)
+
+@app.route("/be_a_guarantor_confirm")
+@login_required
+def be_a_guarantor_confirm():
+    votation_id = request.args.get('votation_id')
+    v = votation.load_votation_by_id(votation_id)
+    msg = "Now, you are a guarantor"
+    o = guarantor.guarantor_dto()
+    app.logger.info(o)
+    o.votation_id = votation_id
+    o.user_id = current_user.u.user_id
+    error = guarantor.validate_dto(o)
+    if error == 0:
+        guarantor.insert_dto(o)
+    else:
+        msg = guarantor.error_messages[error]
+    return render_template('be_a_guarantor_confirm_template.html', pagetitle="Guarantor confirm", v=v,msg=msg)
 
 @login_manager.unauthorized_handler
 def unauthorized():
