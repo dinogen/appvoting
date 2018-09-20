@@ -55,8 +55,10 @@ def votation_propose():
         v.votation_status = votation.STATUS_WAIT_FOR_CAND_AND_GUAR
         result, message = votation.validate_dto(v)
         if result:
-            votation.insert_votation_dto(v)
-            message = "Your votation is saved"
+            if votation.insert_votation_dto(v):
+                message = "Your votation is saved"
+            else:
+                message = "Error, your votation is not saved"                    
     return render_template('votation_propose_template.html', pagetitle="Start a Votation", \
     votation_obj=v, message=message)
 

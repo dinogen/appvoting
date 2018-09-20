@@ -8,7 +8,7 @@ create table votation
 (
     votation_id integer primary key autoincrement,
     promoter_user_id integer,
-    votation_description text,
+    votation_description text unique,
     begin_date date,
     end_date date,
     votation_type text,

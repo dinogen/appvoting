@@ -12,25 +12,29 @@ STATUS_WAIT_FOR_GUAR_KEYS = 3
 STATUS_CALCULATION = 4
 STATUS_ENDED = 5
 STATUS_FAILED = 6
-states = [ \
-"Waiting for candidates and guarantors" , \
-"Waiting for guarantors hashes" , \
-"Waiting for candidates keys" , \
-"Waiting for guarantors keys" , \
-"Elaboration" , \
-"Ended" , \
-"Failed" , \
+states = [
+    "Waiting for candidates and guarantors",
+    "Waiting for guarantors hashes",
+    "Waiting for candidates keys",
+    "Waiting for guarantors keys",
+    "Elaboration",
+    "Ended",
+    "Failed",
 ]
+
+
 class votation_dto:
     """DTO class for the database table"""
+
     def __init__(self):
         self.votation_id = None
         self.promoter_user_id = None
         self.votation_description = None
         self.begin_date = None
         self.end_date = None
-        self.votation_type = None 
-        self.votation_status = None 
+        self.votation_type = None
+        self.votation_status = None
+
 
 def get_blank_dto():
     v = votation_dto()
@@ -41,15 +45,15 @@ def get_blank_dto():
     v.end_date = ''
     v.votation_type = ''
     v.votation_status = 0
-    return v 
-    
+    return v
+
 
 def load_votation_by_id(votation_id):
     """Returns a votation_dto object or None"""
     v = None
     conn = dbmanager.get_connection()
     c = conn.cursor()
-    c.execute("select * from votation where votation_id = ?", (votation_id,) )
+    c.execute("select * from votation where votation_id = ?", (votation_id,))
     row = c.fetchone()
     if row:
         v = votation_dto()
@@ -70,7 +74,7 @@ def load_votations():
     ar = []
     conn = dbmanager.get_connection()
     c = conn.cursor()
-    c.execute("select * from votation" )
+    c.execute("select * from votation")
     row = c.fetchone()
     while row:
         v = votation_dto()
@@ -86,13 +90,15 @@ def load_votations():
     c.close()
     conn.close()
     return ar
+
 
 def load_votations_by_promoter_user_id(promoter_user_id):
     """Returns a votation_dto array"""
     ar = []
     conn = dbmanager.get_connection()
     c = conn.cursor()
-    c.execute("select * from votation where promoter_user_id = ?", (promoter_user_id,) )
+    c.execute("select * from votation where promoter_user_id = ?",
+              (promoter_user_id,))
     row = c.fetchone()
     while row:
         v = votation_dto()
@@ -109,28 +115,36 @@ def load_votations_by_promoter_user_id(promoter_user_id):
     conn.close()
     return ar
 
+
 def insert_votation_dto(v):
-    """Insert the votation_dto into the DB"""   
-    conn = dbmanager.get_connection()
-    c = conn.cursor()
-    c.execute("""insert into votation(
-                    promoter_user_id, 
-                    votation_description, 
-                    begin_date, 
-                    end_date, 
-                    votation_type,
-                    votation_status) values(?,?,?,?,?,?)""",(v.promoter_user_id, v.votation_description, v.begin_date, v.end_date, v.votation_type,v.votation_status) )
-    v.votation_id = c.lastrowid
-    c.close()
-    conn.close()
-        
+    """Insert the votation_dto into the DB"""
+    result = True
+    try:
+        conn = dbmanager.get_connection()
+        c = conn.cursor()
+        c.execute("""insert into votation(
+                        promoter_user_id, 
+                        votation_description, 
+                        begin_date, 
+                        end_date, 
+                        votation_type,
+                        votation_status) values(?,?,?,?,?,?)""", (v.promoter_user_id, v.votation_description, v.begin_date, v.end_date, v.votation_type, v.votation_status))
+        v.votation_id = c.lastrowid
+        c.close()
+        conn.close()
+    except:
+        result = False
+    return result
+
+
 def delete_votation_by_id(votation_id):
-    """Delete the votation from the DB"""    
+    """Delete the votation from the DB"""
     conn = dbmanager.get_connection()
     c = conn.cursor()
     c.execute("delete from votation where votation_id = ?", (votation_id,))
     c.close()
     conn.close()
+
 
 def validate_dto(v):
     """Validate data for writing in DB. Returns (True/False, "Error message")"""
@@ -157,11 +171,11 @@ def validate_dto(v):
             result = False
             errorMessage = "Votation Type not valid"
     if result:
-        if v.votation_status >= STATUS_WAIT_FOR_CAND_AND_GUAR and v.votation_type <= STATUS_OVERDUE:
+        if v.votation_status < STATUS_WAIT_FOR_CAND_AND_GUAR or v.votation_status > STATUS_FAILED:
             result = False
-            errorMessage = "Status not valid"
+            errorMessage = "Status not valid: {}".format(v.votation_status)
     return (result, errorMessage)
-            
+
 
 def validate_string_date(d):
     result = True
@@ -169,7 +183,7 @@ def validate_string_date(d):
         y = int(d[0:4])
         m = int(d[5:7])
         d = int(d[8:10])
-        date(y,m,d)
+        date(y, m, d)
     except:
         result = False
-    return result    
+    return result
