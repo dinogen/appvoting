@@ -167,6 +167,10 @@ def validate_dto(v):
             result = False
             errorMessage = "End date not valid"
     if result:
+        if v.end_date < v.begin_date:
+            result = False
+            errorMessage = "Begin and End dates are not in sequence"
+    if result:
         if v.votation_type != 'random' and v.votation_type != 'majority':
             result = False
             errorMessage = "Votation Type not valid"

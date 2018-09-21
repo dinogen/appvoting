@@ -86,7 +86,7 @@ def be_a_guarantor(votation_id):
 def be_a_candidate_confirm():
     votation_id = int(request.args.get('votation_id'))
     v = votation.load_votation_by_id(votation_id)
-    msg = "Now, you are a candidate"
+    message = "Now, you are a candidate"
     o = candidate.candidate_dto()
     app.logger.info(o)
     o.votation_id = votation_id
@@ -95,15 +95,15 @@ def be_a_candidate_confirm():
     if error == 0:
         candidate.insert_dto(o)
     else:
-        msg = candidate.error_messages[error]
-    return render_template('be_a_candidate_confirm_template.html', pagetitle="Candidate confirm", v=v,msg=msg)
+        message = candidate.error_messages[error] + ": " + v.votation_description 
+    return render_template('be_a_candidate_confirm_template.html', pagetitle="Candidate confirm", v=v,message=message)
 
 @app.route("/be_a_guarantor_confirm")
 @login_required
 def be_a_guarantor_confirm():
     votation_id = int(request.args.get('votation_id'))
     v = votation.load_votation_by_id(votation_id)
-    msg = "Now, you are a guarantor"
+    message = "Now, you are a guarantor"
     o = guarantor.guarantor_dto()
     app.logger.info(o)
     o.votation_id = votation_id
@@ -112,8 +112,8 @@ def be_a_guarantor_confirm():
     if error == 0:
         guarantor.insert_dto(o)
     else:
-        msg = guarantor.error_messages[error]
-    return render_template('be_a_guarantor_confirm_template.html', pagetitle="Guarantor confirm", v=v,msg=msg)
+        message = guarantor.error_messages[error] + ": " + v.votation_description 
+    return render_template('be_a_guarantor_confirm_template.html', pagetitle="Guarantor confirm", v=v,message=message)
 
 @app.route("/votation_detail/<int:votation_id>")
 @login_required

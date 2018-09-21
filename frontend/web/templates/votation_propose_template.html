@@ -3,30 +3,29 @@
 
 <h3>Input data about your votation</h3>
 <form action="votation_propose" method="post">
-    <div>
-        Description
-        <input type="text" id="votation_description" name="votation_description" value="{{votation_obj.votation_description}}">
+    <div class="form-group">
+        <label for="votation_description">Description</label>
+        <input type="text" class="form-control" id="votation_description" name="votation_description" value="{{votation_obj.votation_description}}">
     </div>
-    <div>
-        Begin date (YYYY-MM-GG)
-        <input type="text" id="begin_date" name="begin_date" value="{{votation_obj.begin_date}}">
+    <div class="form-group">
+        <label for="begin_date">Begin date (YYYY-MM-GG)</label>
+        <input type="text" class="form-control" maxlength="10" id="begin_date" name="begin_date" value="{{votation_obj.begin_date}}">
     </div>
-    <div>
-        End date (YYYY-MM-GG)
-        <input type="text" id="end_date" name="end_date" value="{{votation_obj.end_date}}">
+    <div class="form-group">
+        <label for="begin_date">End date (YYYY-MM-GG)</label>
+        <input type="text" class="form-control" maxlength="10" id="end_date" name="end_date" value="{{votation_obj.end_date}}">
     </div>
-    <div>
-        Type
-        <select id="votation_type" name="votation_type">
+    <div class="form-group">
+        <label for="begin_date">Type</label>
+        <select id="votation_type" name="votation_type" class="form-control">
             <option value="random" selected>Random</option>
             <option value="majority">Majority</option>
         </select>
     </div>
 
     <div>
-        <input type="submit" value="Save" />
+        <input type="submit" value="Save" class="btn btn-primary" />
     </div>
 </form>
-<div>{{message}}</div>
 
 {% endblock %}
