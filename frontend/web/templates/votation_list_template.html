@@ -1,32 +1,26 @@
 {% extends "base_template.html" %} {% block body %}
 
 <div class="container">
-    <div class="row">
-        <div class="col-sm">ID</div>
-        <div class="col-sm">Status</div>
-        <div class="col-sm">Description</div>
-        <div class="col-sm">Begin</div>
-        <div class="col-sm">End</div>
-        <div class="col-sm">&nbsp;</div>
-        <div class="col-sm">&nbsp;</div>
-    </div>
     {% for v in votations_array %}
-    
-    <div class="row">
-        <div class="col-sm">
-            <a href="/votation_detail/{{v.votation_id}}">{{v.votation_id}}</a>
+    <div class="container border-bottom">
+        <div class="row">
+            <div class="col-1">
+                <a href="/votation_detail/{{v.votation_id}}">{{v.votation_id}}</a>
+            </div>
+            <div class="col-4">{{v.votation_description}}</div>
+            <div class="col-3">{{states[v.votation_status]}}</div>
+            <div class="col-2">
+                <a href="/be_a_candidate/{{v.votation_id}}">Be a candidate</a>
+            </div>
         </div>
-        <div class="col-sm">{{states[v.votation_status]}}</div>
-        <div class="col-sm">{{v.votation_description}}</div>
-        <div class="col-sm">{{v.begin_date}}</div>
-        <div class="col-sm">{{v.end_date}}</div>
-        <div class="col-sm">
-            <a href="/be_a_candidate/{{v.votation_id}}">Be a candidate</a>
-        </div>
-        <div class="col-sm">
-            <a href="/be_a_guarantor/{{v.votation_id}}">Be a guarantor</a>
+        <div class="row">
+            <div class="col-4">Starts at {{v.begin_date}}</div>
+            <div class="col-4">Ends at {{v.end_date}}</div>
+            <div class="col-2">
+                <a href="/be_a_guarantor/{{v.votation_id}}">Be a guarantor</a>
+            </div>
         </div>
     </div>
-    {% endfor %}    
+    {% endfor %}
 </div>
 {% endblock %}
