@@ -191,3 +191,11 @@ def validate_string_date(d):
     except:
         result = False
     return result
+
+
+def update_status(votation_id, new_status):
+    conn = dbmanager.get_connection()
+    c = conn.cursor()
+    c.execute("update votation set votation_status=? where votation_id = ?", (new_status,votation_id,))
+    c.close()
+    conn.close()

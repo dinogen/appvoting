@@ -128,8 +128,12 @@ def votation_detail(votation_id):
 @login_required
 def start_election(votation_id):
     v = votation.load_votation_by_id(votation_id)
-    candidates_array = candidate.load_candidate_by_votation(votation_id)
-    guarantors_array = guarantor.load_guarantor_by_votation(votation_id)
+    candidates_array = None
+    guarantors_array = None
+    if current_user.u.user_id == v.promoter_user_id:
+        candidates_array = candidate.load_candidate_by_votation(votation_id)
+        guarantors_array = guarantor.load_guarantor_by_votation(votation_id)
+        votation.update_status(votation_id, votation.STATUS_WAIT_FOR_GUAR_HASHES)
     return render_template('start_election_template.html', pagetitle="Start Election", \
     v=v, candidates_array=candidates_array, guarantors_array=guarantors_array)
 
