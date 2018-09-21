@@ -2,7 +2,7 @@
 <h3>Votation details</h3>
 <div>Id: {{v.votation_id}}</div>
 <div>Description: {{v.votation_description}}</div>
-<div>Status:{{v.votation_status}}</div>
+<div>Status: {{states[v.votation_status]}}</div>
 <div>Created by: {{v.promoter_user_id}}</div>
 <div>Begins at: {{v.begin_date}}</div>
 <div>Ends at: {{v.end_date}}</div>
@@ -10,6 +10,13 @@
 <div>
     <h3>Candidates:</h3>
     {% for u in candidates_array %}
+        <div>{{u.user_name}}</div>
+    {% endfor %}
+    
+</div>
+<div>
+    <h3>Guarantors:</h3>
+    {% for u in guarantors_array %}
         <div>{{u.user_name}}</div>
     {% endfor %}
     

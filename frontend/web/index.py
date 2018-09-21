@@ -122,7 +122,7 @@ def votation_detail(votation_id):
     candidates_array = candidate.load_candidate_by_votation(votation_id)
     guarantors_array = guarantor.load_guarantor_by_votation(votation_id)
     return render_template('votation_detail_template.html', pagetitle="Votation detail", \
-    v=v, candidates_array=candidates_array, guarantors_array=guarantors_array)
+    v=v, candidates_array=candidates_array, guarantors_array=guarantors_array,states=votation.states)
 
 
 
