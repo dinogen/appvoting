@@ -124,6 +124,15 @@ def votation_detail(votation_id):
     return render_template('votation_detail_template.html', pagetitle="Votation detail", \
     v=v, candidates_array=candidates_array, guarantors_array=guarantors_array,states=votation.states)
 
+@app.route("/start_election/<int:votation_id>")
+@login_required
+def start_election(votation_id):
+    v = votation.load_votation_by_id(votation_id)
+    candidates_array = candidate.load_candidate_by_votation(votation_id)
+    guarantors_array = guarantor.load_guarantor_by_votation(votation_id)
+    return render_template('start_election_template.html', pagetitle="Start Election", \
+    v=v, candidates_array=candidates_array, guarantors_array=guarantors_array)
+
 
 
 
