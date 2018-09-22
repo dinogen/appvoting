@@ -33,12 +33,12 @@ CREATE TABLE guarantor
     hash_ok integer,
     primary key (votation_id, user_id)
 );
-INSERT INTO guarantor VALUES(2,5,NULL,NULL);
-INSERT INTO guarantor VALUES(3,5,NULL,NULL);
-INSERT INTO guarantor VALUES(4,5,NULL,NULL);
-INSERT INTO guarantor VALUES(2,6,NULL,NULL);
-INSERT INTO guarantor VALUES(3,6,NULL,NULL);
-INSERT INTO guarantor VALUES(4,6,NULL,NULL);
+INSERT INTO guarantor VALUES(2,5,0,0);
+INSERT INTO guarantor VALUES(3,5,0,0);
+INSERT INTO guarantor VALUES(4,5,0,0);
+INSERT INTO guarantor VALUES(2,6,0,0);
+INSERT INTO guarantor VALUES(3,6,0,0);
+INSERT INTO guarantor VALUES(4,6,0,0);
 CREATE TABLE candidate
 (
     votation_id integer,

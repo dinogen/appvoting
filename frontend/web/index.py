@@ -135,13 +135,29 @@ def start_election(votation_id):
         candidates_array = candidate.load_candidate_by_votation(votation_id)
         guarantors_array = guarantor.load_guarantor_by_votation(votation_id)
         # TODO error handling
-        backend.start_election("election_{}".format(v.votation_id), len(candidates_array), len(guarantors_array) )
+        backend.start_election(v.votation_id, len(candidates_array), len(guarantors_array) )
         votation.update_status(votation_id, votation.STATUS_WAIT_FOR_GUAR_HASHES)
     return render_template('start_election_template.html', pagetitle="Start Election", \
-    v=v, candidates_array=candidates_array, guarantors_array=guarantors_array)
+      v=v, candidates_array=candidates_array, guarantors_array=guarantors_array)
 
-
-
+@app.route("/send_passphrase", methods=['POST',])
+@login_required
+def send_passphrase():
+    message = None
+    votation_id = int(request.form['votation_id'])
+    passphrase = request.form['passphrase']
+    v = votation.load_votation_by_id(votation_id)
+    if v.votation_status == votation.STATUS_WAIT_FOR_GUAR_HASHES:
+        # TODO scramble the key in the javascript
+        # TODO handle this with ajax
+        hash_key = "bla bla bla" # TODO in the javascript
+        u = current_user.u
+        # TODO error handling
+        backend.guarantor_send_hash(votation_id, u.user_id, hash_key)
+        message = "Your passphrase was registered."
+        app.logger.info("Set hash ok: votation_id={}, user_id={}".format(votation_id, u.user_id,))
+        guarantor.set_hash_ok(u.user_id,votation_id)
+    return render_template('thank_you_template.html', pagetitle="Thank you", message=message)
 
 @login_manager.unauthorized_handler
 def unauthorized():

@@ -15,13 +15,13 @@
     {% for u in candidates_array %}
         <div>
         {% if v.votation_status == 1 and current_user.u.user_id == u.user_id %}
-            <form action="send_passphrase" method="POST">
+            <form action="/send_passphrase" method="POST">
                 {{u.user_name}} <input type="text" id="passphrase" name="passphrase">
+                <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}">
                 <input type="submit" value="Send passphrase" class="btn btn-primary" />
-            </form>
-        
+            </form>        
         {% else %}
-        {{u.user_name}}
+            {{u.user_name}}
         {% endif %}
         </div>
 {% endfor %}
@@ -30,8 +30,17 @@
 <div>
     <h3>Guarantors:</h3>
     {% for u in guarantors_array %}
-        <div>{{u.user_name}}
-        </div>
+    <div>
+        {% if v.votation_status == 1 and current_user.u.user_id == u.user_id %}
+            <form action="/send_passphrase" method="POST">
+                {{u.user_name}} <input type="text" id="passphrase" name="passphrase">
+                <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}">
+                <input type="submit" value="Send passphrase" class="btn btn-primary" />
+            </form>        
+        {% else %}
+            {{u.user_name}}
+        {% endif %}
+    </div>
     {% endfor %}
     
 </div>

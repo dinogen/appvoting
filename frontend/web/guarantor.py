@@ -10,6 +10,8 @@ class guarantor_dto:
     def __init__(self):
         self.votation_id = None
         self.user_id = None
+        self.hash_ok = None
+        self.passphrase_ok = None
 
 def load_guarantor_by_votation(votation_id):
     """Returns a user_dto array"""
@@ -30,6 +32,7 @@ where c.votation_id = ?
     c.close()
     conn.close()
     return ar
+
 def check_for_duplicate(o):
     """Returns true/false"""
     result = False
@@ -49,7 +52,7 @@ def insert_dto(o):
     c = conn.cursor()
     c.execute("""insert into guarantor(
                     votation_id, 
-                    user_id) values(?,?)""",(o.votation_id, o.user_id) )
+                    user_id, hash_ok, passphrase_ok) values(?,?,0,0)""",(o.votation_id, o.user_id) )
     c.close()
     conn.close()
 
@@ -84,4 +87,13 @@ def validate_dto(o):
             result = 5
     return result
             
+def set_hash_ok(user_id,votation_id):
+    """g is an instance of guarantor_dto"""   
+    conn = dbmanager.get_connection()
+    c = conn.cursor()
+    c.execute("""update guarantor set hash_ok = 1 where 
+                    votation_id = ? and
+                    user_id = ?""",(votation_id, user_id) )
+    c.close()
+    conn.close()
 
