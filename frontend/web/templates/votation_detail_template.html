@@ -1,0 +1,27 @@
+{% extends "base_template.html" %} {% block body %}
+<h3>Votation details</h3>
+<div>Id: {{v.votation_id}}</div>
+<div>Description: {{v.votation_description}}</div>
+<div>Status: {{states[v.votation_status]}}</div>
+<div>Created by: {{v.promoter_user_id}}</div>
+<div>Begins at: {{v.begin_date}}</div>
+<div>Ends at: {{v.end_date}}</div>
+<div>Type: {{v.votation_type}}</div>
+{% if current_user.u.user_id == v.promoter_user_id %}
+<div><a href="/start_election/{{v.votation_id}}" class="btn btn-primary">Start the Election</a></div>
+{% endif %}
+<div>
+    <h3>Candidates:</h3>
+    {% for u in candidates_array %}
+        <div>{{u.user_name}}</div>
+    {% endfor %}
+    
+</div>
+<div>
+    <h3>Guarantors:</h3>
+    {% for u in guarantors_array %}
+        <div>{{u.user_name}}</div>
+    {% endfor %}
+    
+</div>
+{% endblock %}

@@ -34,13 +34,18 @@
         {% endif %}
 
         <div>
-            <h1>{{pagetitle}}</h1>
+            <h1>Voting system</h1>
+            <h2>{{pagetitle}}</h2>
             <div>
                 {% block body %}{% endblock %}
             </div>
         </div>
-
     </div>
+    {% if message %}
+    <div class="container">
+        <div class="alert alert-primary" role="alert">{{message}}</div>
+    </div>
+    {% endif %}
 </body>
 
 </html>

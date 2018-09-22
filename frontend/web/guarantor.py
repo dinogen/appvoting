@@ -5,19 +5,19 @@ from datetime import date
 import user
 import votation
 
-class candidate_dto:
+class guarantor_dto:
     """DTO class for the database table"""
     def __init__(self):
         self.votation_id = None
         self.user_id = None
 
-def load_candidate_by_votation(votation_id):
+def load_guarantor_by_votation(votation_id):
     """Returns a user_dto array"""
     ar = []
     conn = dbmanager.get_connection()
     c = conn.cursor()
     c.execute("""select u.* 
-from candidate c, voting_user u 
+from guarantor c, voting_user u 
 where c.votation_id = ? 
   and c.user_id = u.user_id""", (votation_id,) )
     row = c.fetchone()
@@ -30,13 +30,12 @@ where c.votation_id = ?
     c.close()
     conn.close()
     return ar
-
 def check_for_duplicate(o):
     """Returns true/false"""
     result = False
     conn = dbmanager.get_connection()
     c = conn.cursor()
-    c.execute("select 1 from candidate where votation_id = ? and user_id=?", (o.votation_id,o.user_id) )
+    c.execute("select 1 from guarantor where votation_id = ? and user_id=?", (o.votation_id,o.user_id) )
     row = c.fetchone()
     if row:
         result = True
@@ -45,10 +44,10 @@ def check_for_duplicate(o):
     return result
 
 def insert_dto(o):
-    """Insert the candidate_dto into the DB"""   
+    """Insert the guarantor_dto into the DB"""   
     conn = dbmanager.get_connection()
     c = conn.cursor()
-    c.execute("""insert into candidate(
+    c.execute("""insert into guarantor(
                     votation_id, 
                     user_id) values(?,?)""",(o.votation_id, o.user_id) )
     c.close()

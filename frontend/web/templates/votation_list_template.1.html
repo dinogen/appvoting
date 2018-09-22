@@ -1,0 +1,38 @@
+{% extends "base_template.html" %} {% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">&nbsp;</div>
+        <div class="col">ID</div>
+        <div class="col-2">Status</div>
+        <div class="col-3">Description</div>
+        <div class="col">Begin</div>
+        <div class="col">End</div>
+        <div class="col">&nbsp;</div>
+        <div class="col">&nbsp;</div>
+    </div>
+    {% for v in votations_array %}
+    
+    <div class="row">
+        <div class="col">
+            {% if current_user.u.user_id == v.promoter_user_id %}
+            <img src="{{url_for('static',filename='img/pencil.svg')}}" alt="">
+            {% endif %}
+        </div>
+        <div class="col">
+            <a href="/votation_detail/{{v.votation_id}}">{{v.votation_id}}</a>
+        </div>
+        <div class="col-2">{{states[v.votation_status]}}</div>
+        <div class="col-3">{{v.votation_description}}</div>
+        <div class="col">{{v.begin_date}}</div>
+        <div class="col">{{v.end_date}}</div>
+        <div class="col">
+            <a href="/be_a_candidate/{{v.votation_id}}">Be a candidate</a>
+        </div>
+        <div class="col">
+            <a href="/be_a_guarantor/{{v.votation_id}}">Be a guarantor</a>
+        </div>
+    </div>
+    {% endfor %}    
+</div>
+{% endblock %}

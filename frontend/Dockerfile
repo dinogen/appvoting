@@ -15,7 +15,7 @@ COPY requirements.txt /app
 RUN pip install -r requirements.txt
 COPY web/ /app/
 COPY database/ /app/database
-COPY database/ /opt/voting
+#COPY database/ /opt/voting
 VOLUME /opt/voting
 ENTRYPOINT ["python"]
 CMD ["index.py"]

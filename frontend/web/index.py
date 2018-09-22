@@ -1,11 +1,13 @@
+import os
 from flask import Flask, render_template,request,redirect,url_for
 from flask_login import LoginManager, login_required, current_user,login_user,logout_user
 import user
 import votation
 import candidate
+import guarantor
 
 app = Flask(__name__)
-app.secret_key = "marcello ciao"
+app.secret_key = os.urandom(24) 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -44,36 +46,47 @@ def votation_propose():
     v = votation.get_blank_dto()
     message = "Please insert data"
     if request.method == 'POST':    
-        v.votation_id = request.form['votation_id']
+        #v.votation_id = request.form['votation_id']
         v.votation_description = request.form['votation_description']
         v.begin_date = request.form['begin_date']
         v.end_date = request.form['end_date']
         v.votation_type = request.form['votation_type']
         v.promoter_user_id = current_user.u.user_id
+        v.votation_status = votation.STATUS_WAIT_FOR_CAND_AND_GUAR
         result, message = votation.validate_dto(v)
         if result:
-            votation.insert_votation_dto(v)
-            message = "Your votation is saved"
-    return render_template('votation_propose_template.html', pagetitle="Votation Propose", votation_obj=v, message=message)
+            if votation.insert_votation_dto(v):
+                message = "Your votation is saved"
+            else:
+                message = "Error, your votation is not saved"                    
+    return render_template('votation_propose_template.html', pagetitle="Start a Votation", \
+    votation_obj=v, message=message)
 
 @app.route("/votation_list", methods=['GET', 'POST'])
 @login_required
 def votation_list():
     votations_array = votation.load_votations()
-    return render_template('votation_list_template.html', pagetitle="Votation List", votations_array=votations_array)
+    return render_template('votation_list_template.html', pagetitle="Votation List", \
+    votations_array=votations_array,states=votation.states)
 
-@app.route("/be_a_candidate/<votation_id>")
+@app.route("/be_a_candidate/<int:votation_id>")
 @login_required
 def be_a_candidate(votation_id):
     v = votation.load_votation_by_id(votation_id)
     return render_template('be_a_candidate_template.html', pagetitle="Candidate confirm", v=v)
 
+@app.route("/be_a_guarantor/<int:votation_id>")
+@login_required
+def be_a_guarantor(votation_id):
+    v = votation.load_votation_by_id(votation_id)
+    return render_template('be_a_guarantor_template.html', pagetitle="Guarantor confirm", v=v)
+
 @app.route("/be_a_candidate_confirm")
 @login_required
 def be_a_candidate_confirm():
-    votation_id = request.args.get('votation_id')
+    votation_id = int(request.args.get('votation_id'))
     v = votation.load_votation_by_id(votation_id)
-    msg = "Now, you are a candidate"
+    message = "Now, you are a candidate"
     o = candidate.candidate_dto()
     app.logger.info(o)
     o.votation_id = votation_id
@@ -82,8 +95,46 @@ def be_a_candidate_confirm():
     if error == 0:
         candidate.insert_dto(o)
     else:
-        msg = candidate.error_messages[error]
-    return render_template('be_a_candidate_confirm_template.html', pagetitle="Candidate confirm", v=v,msg=msg)
+        message = candidate.error_messages[error] + ": " + v.votation_description 
+    return render_template('be_a_candidate_confirm_template.html', pagetitle="Candidate confirm", v=v,message=message)
+
+@app.route("/be_a_guarantor_confirm")
+@login_required
+def be_a_guarantor_confirm():
+    votation_id = int(request.args.get('votation_id'))
+    v = votation.load_votation_by_id(votation_id)
+    message = "Now, you are a guarantor"
+    o = guarantor.guarantor_dto()
+    app.logger.info(o)
+    o.votation_id = votation_id
+    o.user_id = current_user.u.user_id
+    error = guarantor.validate_dto(o)
+    if error == 0:
+        guarantor.insert_dto(o)
+    else:
+        message = guarantor.error_messages[error] + ": " + v.votation_description 
+    return render_template('be_a_guarantor_confirm_template.html', pagetitle="Guarantor confirm", v=v,message=message)
+
+@app.route("/votation_detail/<int:votation_id>")
+@login_required
+def votation_detail(votation_id):
+    v = votation.load_votation_by_id(votation_id)
+    candidates_array = candidate.load_candidate_by_votation(votation_id)
+    guarantors_array = guarantor.load_guarantor_by_votation(votation_id)
+    return render_template('votation_detail_template.html', pagetitle="Votation detail", \
+    v=v, candidates_array=candidates_array, guarantors_array=guarantors_array,states=votation.states)
+
+@app.route("/start_election/<int:votation_id>")
+@login_required
+def start_election(votation_id):
+    v = votation.load_votation_by_id(votation_id)
+    candidates_array = candidate.load_candidate_by_votation(votation_id)
+    guarantors_array = guarantor.load_guarantor_by_votation(votation_id)
+    return render_template('start_election_template.html', pagetitle="Start Election", \
+    v=v, candidates_array=candidates_array, guarantors_array=guarantors_array)
+
+
+
 
 @login_manager.unauthorized_handler
 def unauthorized():
