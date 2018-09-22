@@ -119,21 +119,22 @@ def load_votations_by_promoter_user_id(promoter_user_id):
 def insert_votation_dto(v):
     """Insert the votation_dto into the DB"""
     result = True
-    try:
-        conn = dbmanager.get_connection()
-        c = conn.cursor()
-        c.execute("""insert into votation(
-                        promoter_user_id, 
-                        votation_description, 
-                        begin_date, 
-                        end_date, 
-                        votation_type,
-                        votation_status) values(?,?,?,?,?,?)""", (v.promoter_user_id, v.votation_description, v.begin_date, v.end_date, v.votation_type, v.votation_status))
-        v.votation_id = c.lastrowid
-        c.close()
-        conn.close()
-    except:
-        result = False
+    #try:
+    conn = dbmanager.get_connection()
+    c = conn.cursor()
+    c.execute("""insert into votation(
+                    promoter_user_id, 
+                    votation_description, 
+                    begin_date, 
+                    end_date, 
+                    votation_type,
+                    votation_status) values(?,?,?,?,?,?)""", (v.promoter_user_id, v.votation_description, v.begin_date, v.end_date, v.votation_type, v.votation_status))
+    v.votation_id = c.lastrowid
+    c.close()
+    conn.close()
+    #except sqlite3.IntegrityError::
+    #    print(e)
+    #    result = False
     return result
 
 
@@ -199,3 +200,7 @@ def update_status(votation_id, new_status):
     c.execute("update votation set votation_status=? where votation_id = ?", (new_status,votation_id,))
     c.close()
     conn.close()
+
+def guarantors_hash_complete(votation_id):
+    """Check if all guarantors has sent the hash"""
+    pass

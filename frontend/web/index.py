@@ -106,9 +106,9 @@ def be_a_guarantor_confirm():
     v = votation.load_votation_by_id(votation_id)
     message = "Now, you are a guarantor"
     o = guarantor.guarantor_dto()
-    app.logger.info(o)
+    #app.logger.info(o)
     o.votation_id = votation_id
-    o.user_id = current_user.u.user_id
+    o.u = current_user.u
     error = guarantor.validate_dto(o)
     if error == 0:
         guarantor.insert_dto(o)

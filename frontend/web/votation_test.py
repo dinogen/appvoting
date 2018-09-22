@@ -1,5 +1,6 @@
 import unittest
 import votation
+import os
 
 class votation_test(unittest.TestCase):
     def test_load_by_id(self):
@@ -7,22 +8,22 @@ class votation_test(unittest.TestCase):
         v1 = votation.load_votation_by_id(1)
         self.assertIsNotNone(v1)
         self.assertEqual(1, v1.votation_id)
-        self.assertEqual("votation test", v1.votation_description)
+        self.assertEqual("votation test 1", v1.votation_description)
         self.assertEqual("random", v1.votation_type)
         self.assertEqual(1, v1.promoter_user_id)
-        self.assertEqual('2018-01-01', v1.begin_date)
-        self.assertEqual('2018-01-15', v1.end_date)
-        self.assertEqual(1,v1.votation_status)
+        self.assertEqual('2018-10-01', v1.begin_date)
+        self.assertEqual('2018-10-30', v1.end_date)
+        self.assertEqual(0,v1.votation_status)
         
     def test_insert(self):
         v = votation.votation_dto()
-        v.votation_description = 'Votation record test 1'
+        v.votation_description = 'Votation automated test ' + str(os.urandom(5))
         v.votation_type = 'random'
         v.promoter_user_id = 1
         v.begin_date = '2018-01-01'
         v.end_date = '2018-01-15'
         v.votation_status = 2
-        votation.insert_votation_dto(v)
+        self.assertTrue( votation.insert_votation_dto(v) )
         self.assertGreater(v.votation_id,0)
         v1 = votation.load_votation_by_id(v.votation_id)
         self.assertIsNotNone(v1)
