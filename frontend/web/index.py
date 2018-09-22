@@ -5,6 +5,7 @@ import user
 import votation
 import candidate
 import guarantor
+import backend
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24) 
@@ -133,6 +134,8 @@ def start_election(votation_id):
     if current_user.u.user_id == v.promoter_user_id:
         candidates_array = candidate.load_candidate_by_votation(votation_id)
         guarantors_array = guarantor.load_guarantor_by_votation(votation_id)
+        # TODO error handling
+        backend.start_election("election_{}".format(v.votation_id), len(candidates_array), len(guarantors_array) )
         votation.update_status(votation_id, votation.STATUS_WAIT_FOR_GUAR_HASHES)
     return render_template('start_election_template.html', pagetitle="Start Election", \
     v=v, candidates_array=candidates_array, guarantors_array=guarantors_array)

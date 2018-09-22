@@ -10,6 +10,7 @@ class candidate_dto:
     def __init__(self):
         self.votation_id = None
         self.user_id = None
+        self.passphrase_ok = 0
 
 def load_candidate_by_votation(votation_id):
     """Returns a user_dto array"""
@@ -50,7 +51,7 @@ def insert_dto(o):
     c = conn.cursor()
     c.execute("""insert into candidate(
                     votation_id, 
-                    user_id) values(?,?)""",(o.votation_id, o.user_id) )
+                    user_id, passphrase_ok) values(?,?,0)""",(o.votation_id, o.user_id) )
     c.close()
     conn.close()
 

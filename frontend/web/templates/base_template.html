@@ -25,7 +25,9 @@
         <img src="https://static.app.copernicani.it/img/cropped-logo_orizzontale_trasparente.png" />
         <br/> {% if current_user.is_authenticated %} Hi, {{current_user.user_name}}, (
         <a href="/logout">logout</a>) (
-        <a href="/">Home</a>) {% else %} Please,
+        <a href="/">Home</a>) 
+        (<a href="/votation_list">Votation list</a>)
+        {% else %} Please,
         <a href="/login">login</a>
         {% endif %}
 
