@@ -91,7 +91,7 @@ def be_a_candidate_confirm():
     o = candidate.candidate_dto()
     app.logger.info(o)
     o.votation_id = votation_id
-    o.user_id = current_user.u.user_id
+    o.u.user_id = current_user.u.user_id
     error = candidate.validate_dto(o)
     if error == 0:
         candidate.insert_dto(o)
@@ -147,19 +147,24 @@ def send_passphrase():
     votation_id = int(request.form['votation_id'])
     passphrase = request.form['passphrase']
     v = votation.load_votation_by_id(votation_id)
+    u = current_user.u
     if v.votation_status == votation.STATUS_WAIT_FOR_GUAR_HASHES:
         # TODO scramble the key in the javascript
         # TODO handle this with ajax
         hash_key = "bla bla bla" # TODO in the javascript
-        u = current_user.u
         # TODO error handling
         backend.guarantor_send_hash(votation_id, u.user_id, hash_key)
         message = "Your passphrase was registered."
-        app.logger.info("Set hash ok: votation_id={}, user_id={}".format(votation_id, u.user_id,))
         guarantor.set_hash_ok(u.user_id,votation_id)
         # check if every guarantors has sent the hash
         if guarantor.guarantors_hash_complete(votation_id):
             votation.update_status(votation_id,votation.STATUS_WAIT_FOR_CAND_KEYS)
+    if v.votation_status == votation.STATUS_WAIT_FOR_CAND_KEYS:
+        backend.candidate_send_passphrase(votation_id,u.user_id,passphrase)
+        message = "Your passphrase was registered."
+        candidate.set_passphrase_ok(u.user_id,votation_id)
+        if candidate.candidates_passphrases_complete(votation_id):
+            votation.update_status(votation_id,votation.STATUS_WAIT_FOR_GUAR_KEYS)
     return render_template('thank_you_template.html', pagetitle="Thank you", message=message)
 
 @login_manager.unauthorized_handler

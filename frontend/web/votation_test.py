@@ -1,6 +1,6 @@
 import unittest
 import votation
-import os
+import random
 
 class votation_test(unittest.TestCase):
     def test_load_by_id(self):
@@ -17,7 +17,7 @@ class votation_test(unittest.TestCase):
         
     def test_insert(self):
         v = votation.votation_dto()
-        v.votation_description = 'Votation automated test ' + str(os.urandom(5))
+        v.votation_description = 'Votation automated test ' + str(random.randint(0,500))
         v.votation_type = 'random'
         v.promoter_user_id = 1
         v.begin_date = '2018-01-01'

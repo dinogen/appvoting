@@ -9,23 +9,21 @@ class candidate_dto:
     """DTO class for the database table"""
     def __init__(self):
         self.votation_id = None
-        self.user_id = None
-        self.passphrase_ok = 0
+        self.u = user.user_dto()
+        self.passphrase_ok = None
 
 def load_candidate_by_votation(votation_id):
-    """Returns a user_dto array"""
+    """Returns a candidate_dto array"""
     ar = []
     conn = dbmanager.get_connection()
     c = conn.cursor()
-    c.execute("""select u.* 
-from candidate c, voting_user u 
-where c.votation_id = ? 
-  and c.user_id = u.user_id""", (votation_id,) )
+    c.execute("select * from candidate c where c.votation_id = ?", (votation_id,) )
     row = c.fetchone()
     while row:
-        o = user.user_dto()
-        o.user_id = row['user_id']
-        o.user_name = row['user_name']
+        o = candidate_dto()
+        o.votation_id = row['votation_id']
+        o.passphrase_ok = row['passphrase_ok']
+        o.u = user.load_user_by_id(row['user_id'])
         ar.append(o)
         row = c.fetchone()
     c.close()
@@ -37,7 +35,7 @@ def check_for_duplicate(o):
     result = False
     conn = dbmanager.get_connection()
     c = conn.cursor()
-    c.execute("select 1 from candidate where votation_id = ? and user_id=?", (o.votation_id,o.user_id) )
+    c.execute("select 1 from candidate where votation_id = ? and user_id=?", (o.votation_id,o.u.user_id) )
     row = c.fetchone()
     if row:
         result = True
@@ -51,7 +49,7 @@ def insert_dto(o):
     c = conn.cursor()
     c.execute("""insert into candidate(
                     votation_id, 
-                    user_id, passphrase_ok) values(?,?,0)""",(o.votation_id, o.user_id) )
+                    user_id, passphrase_ok) values(?,?,?)""",(o.votation_id, o.u.user_id,o.passphrase_ok) )
     c.close()
     conn.close()
 
@@ -68,13 +66,13 @@ def validate_dto(o):
     """Validate data for writing in DB. Returns error code, 0 on success"""
     result = 0
     if result==0:
-        if o.user_id == None:
+        if o.u.user_id == None:
             result = 1
     if result==0:
         if o.votation_id == None:
             result = 2
     if result==0:
-        u = user.load_user_by_id(o.user_id)
+        u = user.load_user_by_id(o.u.user_id)
         if u == None:
             result = 3
     if result==0:
@@ -86,4 +84,22 @@ def validate_dto(o):
             result = 5
     return result
             
+def set_passphrase_ok(user_id,votation_id):
+    conn = dbmanager.get_connection()
+    c = conn.cursor()
+    c.execute("""update candidate set passphrase_ok = 1 where 
+                    votation_id = ? and
+                    user_id = ?""",(votation_id, user_id) )
+    c.close()
+    conn.close()
+
+def candidates_passphrases_complete(votation_id):
+    """Check if all candidates has sent the passphrase"""
+    ar = load_candidate_by_votation(votation_id)
+    if len(ar) == 0:
+        return False
+    for c in ar:
+        if c.passphrase_ok == 0:
+            return False
+    return True
 
