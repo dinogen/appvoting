@@ -201,6 +201,5 @@ def update_status(votation_id, new_status):
     c.close()
     conn.close()
 
-def guarantors_hash_complete(votation_id):
-    """Check if all guarantors has sent the hash"""
-    pass
+
+    

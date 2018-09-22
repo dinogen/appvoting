@@ -157,6 +157,9 @@ def send_passphrase():
         message = "Your passphrase was registered."
         app.logger.info("Set hash ok: votation_id={}, user_id={}".format(votation_id, u.user_id,))
         guarantor.set_hash_ok(u.user_id,votation_id)
+        # check if every guarantors has sent the hash
+        if guarantor.guarantors_hash_complete(votation_id):
+            votation.update_status(votation_id,votation.STATUS_WAIT_FOR_CAND_KEYS)
     return render_template('thank_you_template.html', pagetitle="Thank you", message=message)
 
 @login_manager.unauthorized_handler

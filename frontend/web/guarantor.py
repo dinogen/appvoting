@@ -51,7 +51,7 @@ def insert_dto(o):
     c = conn.cursor()
     c.execute("""insert into guarantor(
                     votation_id, 
-                    user_id, hash_ok, passphrase_ok) values(?,?,0,0)""",(o.votation_id, o.u.user_id) )
+                    user_id, hash_ok, passphrase_ok) values(?,?,?,?)""",(o.votation_id, o.u.user_id,o.hash_ok,o.passphrase_ok) )
     c.close()
     conn.close()
 
@@ -95,3 +95,13 @@ def set_hash_ok(user_id,votation_id):
     c.close()
     conn.close()
 
+
+def guarantors_hash_complete(votation_id):
+    """Check if all guarantors has sent the hash"""
+    ar = load_guarantor_by_votation(votation_id)
+    if len(ar) == 0:
+        return False
+    for g in ar:
+        if g.hash_ok == 0:
+            return False
+    return True
