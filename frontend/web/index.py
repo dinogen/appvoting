@@ -138,7 +138,7 @@ def start_election(votation_id):
         candidates_array = candidate.load_candidate_by_votation(votation_id)
         guarantors_array = guarantor.load_guarantor_by_votation(votation_id)
         # TODO error handling
-        backend.start_election(v.votation_id, len(candidates_array), len(guarantors_array) )
+        backend.create_election(v.votation_id, len(candidates_array), len(guarantors_array) )
         votation.update_status(votation_id, votation.STATUS_WAIT_FOR_GUAR_HASHES)
     return render_template('start_election_template.html', pagetitle="Start Election", \
       v=v, candidates_array=candidates_array, guarantors_array=guarantors_array)
