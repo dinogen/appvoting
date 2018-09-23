@@ -157,17 +157,23 @@ def send_passphrase():
         hash_key = "bla bla bla" # TODO in the javascript
         # TODO error handling
         backend.guarantor_send_hash(votation_id, u.user_id, hash_key)
-        message = "Your passphrase was registered."
+        message = "Guarantor, your passphrase was registered."
         guarantor.set_hash_ok(u.user_id,votation_id)
         # check if every guarantors has sent the hash
         if guarantor.guarantors_hash_complete(votation_id):
             votation.update_status(votation_id,votation.STATUS_WAIT_FOR_CAND_KEYS)
     if v.votation_status == votation.STATUS_WAIT_FOR_CAND_KEYS:
         backend.candidate_send_passphrase(votation_id,u.user_id,passphrase)
-        message = "Your passphrase was registered."
+        message = "Candidate, your passphrase was registered."
         candidate.set_passphrase_ok(u.user_id,votation_id)
         if candidate.candidates_passphrases_complete(votation_id):
             votation.update_status(votation_id,votation.STATUS_WAIT_FOR_GUAR_KEYS)
+    if v.votation_status == votation.STATUS_WAIT_FOR_GUAR_KEYS:
+        backend.guarantor_confirm_passphrase(votation_id, u.user_id, passphrase)
+        message = "Guarantor, your passphrase was confirmed."
+        guarantor.set_passphrase_ok(u.user_id,votation_id)
+        if guarantor.guarantors_passphrase_complete(votation_id):
+            votation.update_status(votation_id,votation.STATUS_CALCULATION)
     return render_template('thank_you_template.html', pagetitle="Thank you", message=message)
 
 @login_manager.unauthorized_handler

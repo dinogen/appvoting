@@ -44,8 +44,18 @@
                     <input type="submit" value="Send passphrase" class="btn btn-primary" />
                 </form>        
             {% endif %}
+        {% elif v.votation_status == 3 and current_user.u.user_id == g.u.user_id %}
+            {% if g.passphrase_ok == 1 %}
+                {{g.u.user_name}} (Passphrase Confirmed)
+            {% else %}
+                <form action="/send_passphrase" method="POST">
+                    {{g.u.user_name}} <input type="text" id="passphrase" name="passphrase">
+                    <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}">
+                    <input type="submit" value="Confirm passphrase" class="btn btn-primary" />
+                </form>        
+            {% endif %}
         {% else %}
-            {{g.u.user_name}} {% if g.hash_ok == 1 %} (Passphrase Sent) {% endif %}
+            {{g.u.user_name}} {% if g.passphrase_ok == 1 %} (Passphrase Confirmed) {% endif %}
         {% endif %}
     </div>
     {% endfor %}

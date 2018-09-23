@@ -16,10 +16,10 @@ TYPE_RANDOM = 'random'
 TYPE_MAJORITY = 'majority'
 states = [
     "Waiting for candidates and guarantors",
-    "Waiting for guarantors hashes",
-    "Waiting for candidates keys",
-    "Waiting for guarantors keys",
-    "Elaboration",
+    "Waiting for guarantors passphrases",
+    "Waiting for candidates passphrases",
+    "Waiting for guarantors confirming passphrases",
+    "Elaborating, please wait...",
     "Ended",
     "Failed",
 ]

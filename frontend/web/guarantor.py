@@ -103,6 +103,15 @@ def set_hash_ok(user_id,votation_id):
     c.close()
     conn.close()
 
+def set_passphrase_ok(user_id,votation_id):
+    conn = dbmanager.get_connection()
+    c = conn.cursor()
+    c.execute("""update guarantor set passphrase_ok = 1 where 
+                    votation_id = ? and
+                    user_id = ?""",(votation_id, user_id) )
+    c.close()
+    conn.close()
+
 
 def guarantors_hash_complete(votation_id):
     """Check if all guarantors has sent the hash"""
@@ -113,3 +122,14 @@ def guarantors_hash_complete(votation_id):
         if g.hash_ok == 0:
             return False
     return True
+
+def guarantors_passphrase_complete(votation_id):
+    """Check if all guarantors has confirmed the passphrase"""
+    ar = load_guarantor_by_votation(votation_id)
+    if len(ar) == 0:
+        return False
+    for g in ar:
+        if g.passphrase_ok == 0:
+            return False
+    return True
+     
