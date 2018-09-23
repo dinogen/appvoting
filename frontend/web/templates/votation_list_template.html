@@ -2,7 +2,7 @@
 
 <div class="container">
     {% for v in votations_array %}
-    {% if v.promoter_user_id == current_user.u.user_id %}
+    {% if v.promoter_user.user_id == current_user.u.user_id %}
         <div class="container border border-success">
     {% else %}
         <div class="container border-bottom">

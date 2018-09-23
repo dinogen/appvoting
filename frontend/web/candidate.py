@@ -60,6 +60,7 @@ error_messages = [
     "The user id is invalid", \
     "The votation id is invalid", \
     "Duplicate record",
+    "Passphrase_ok not valid"
 ]
         
 def validate_dto(o):
@@ -82,6 +83,9 @@ def validate_dto(o):
     if result==0:
         if check_for_duplicate(o):
             result = 5
+    if result==0:
+        if o.passphrase_ok == None:
+            result = 6
     return result
             
 def set_passphrase_ok(user_id,votation_id):

@@ -12,6 +12,8 @@ STATUS_WAIT_FOR_GUAR_KEYS = 3
 STATUS_CALCULATION = 4
 STATUS_ENDED = 5
 STATUS_FAILED = 6
+TYPE_RANDOM = 'random'
+TYPE_MAJORITY = 'majority'
 states = [
     "Waiting for candidates and guarantors",
     "Waiting for guarantors hashes",
@@ -28,7 +30,7 @@ class votation_dto:
 
     def __init__(self):
         self.votation_id = None
-        self.promoter_user_id = None
+        self.promoter_user = user.user_dto()
         self.votation_description = None
         self.begin_date = None
         self.end_date = None
@@ -39,7 +41,7 @@ class votation_dto:
 def get_blank_dto():
     v = votation_dto()
     v.votation_id = 0
-    v.promoter_user_id = 0
+    v.promoter_user.user_id = 0
     v.votation_description = ''
     v.begin_date = ''
     v.end_date = ''
@@ -58,7 +60,7 @@ def load_votation_by_id(votation_id):
     if row:
         v = votation_dto()
         v.votation_id = row['votation_id']
-        v.promoter_user_id = row['promoter_user_id']
+        v.promoter_user = user.load_user_by_id( row['promoter_user_id'] )
         v.votation_description = row['votation_description']
         v.begin_date = row['begin_date']
         v.end_date = row['end_date']
@@ -79,7 +81,7 @@ def load_votations():
     while row:
         v = votation_dto()
         v.votation_id = row['votation_id']
-        v.promoter_user_id = row['promoter_user_id']
+        v.promoter_user = user.load_user_by_id( row['promoter_user_id'] )
         v.votation_description = row['votation_description']
         v.begin_date = row['begin_date']
         v.end_date = row['end_date']
@@ -103,7 +105,7 @@ def load_votations_by_promoter_user_id(promoter_user_id):
     while row:
         v = votation_dto()
         v.votation_id = row['votation_id']
-        v.promoter_user_id = row['promoter_user_id']
+        v.promoter_user = user.load_user_by_id(row['promoter_user_id'])
         v.votation_description = row['votation_description']
         v.begin_date = row['begin_date']
         v.end_date = row['end_date']
@@ -128,7 +130,7 @@ def insert_votation_dto(v):
                     begin_date, 
                     end_date, 
                     votation_type,
-                    votation_status) values(?,?,?,?,?,?)""", (v.promoter_user_id, v.votation_description, v.begin_date, v.end_date, v.votation_type, v.votation_status))
+                    votation_status) values(?,?,?,?,?,?)""", (v.promoter_user.user_id, v.votation_description, v.begin_date, v.end_date, v.votation_type, v.votation_status))
     v.votation_id = c.lastrowid
     c.close()
     conn.close()
@@ -152,7 +154,7 @@ def validate_dto(v):
     result = True
     errorMessage = "Data validated"
     if result:
-        if user.load_user_by_id(v.promoter_user_id) == None:
+        if user.load_user_by_id(v.promoter_user.user_id) == None:
             result = False
             errorMessage = "Promoter user id not valid"
     if result:
@@ -172,7 +174,7 @@ def validate_dto(v):
             result = False
             errorMessage = "Begin and End dates are not in sequence"
     if result:
-        if v.votation_type != 'random' and v.votation_type != 'majority':
+        if v.votation_type != TYPE_RANDOM and v.votation_type != TYPE_MAJORITY:
             result = False
             errorMessage = "Votation Type not valid"
     if result:

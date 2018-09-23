@@ -22,6 +22,7 @@ class candidate_test(unittest.TestCase):
         o = candidate.candidate_dto()
         o.votation_id = 1
         o.u.user_id = 1
+        o.passphrase_ok = 0
         self.assertEqual(0,candidate.validate_dto(o))
     def test_validate_5(self):
         o = candidate.candidate_dto()

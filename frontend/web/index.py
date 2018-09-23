@@ -52,7 +52,7 @@ def votation_propose():
         v.begin_date = request.form['begin_date']
         v.end_date = request.form['end_date']
         v.votation_type = request.form['votation_type']
-        v.promoter_user_id = current_user.u.user_id
+        v.promoter_user = current_user.u
         v.votation_status = votation.STATUS_WAIT_FOR_CAND_AND_GUAR
         result, message = votation.validate_dto(v)
         if result:
@@ -134,7 +134,7 @@ def start_election(votation_id):
     v = votation.load_votation_by_id(votation_id)
     candidates_array = None
     guarantors_array = None
-    if current_user.u.user_id == v.promoter_user_id:
+    if current_user.u.user_id == v.promoter_user.user_id:
         candidates_array = candidate.load_candidate_by_votation(votation_id)
         guarantors_array = guarantor.load_guarantor_by_votation(votation_id)
         # TODO error handling

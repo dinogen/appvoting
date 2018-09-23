@@ -23,6 +23,8 @@ class guarantor_test(unittest.TestCase):
         o = guarantor.guarantor_dto()
         o.votation_id = 1
         o.u.user_id = 1
+        o.passphrase_ok = 0
+        o.hash_ok = 0
         self.assertEqual(0,guarantor.validate_dto(o))
     def test_validate_5(self):
         o = guarantor.guarantor_dto()
@@ -33,7 +35,7 @@ class guarantor_test(unittest.TestCase):
         v = votation.votation_dto()
         v.votation_description = 'Guar automated test ' + str(random.randint(1,500))
         v.votation_type = 'random'
-        v.promoter_user_id = 1
+        v.promoter_user.user_id = 1
         v.begin_date = '2018-01-01'
         v.end_date = '2018-01-15'
         v.votation_status = 1
@@ -42,18 +44,20 @@ class guarantor_test(unittest.TestCase):
         g.votation_id = v.votation_id
         g.u.user_id = 5
         g.hash_ok = 1
+        g.passphrase_ok = 0
         guarantor.insert_dto(g)
         g = guarantor.guarantor_dto()
         g.votation_id = v.votation_id
         g.u.user_id = 6
         g.hash_ok = 1
+        g.passphrase_ok = 0
         guarantor.insert_dto(g)
         self.assertTrue(guarantor.guarantors_hash_complete(v.votation_id))
     def test_hash_complete_no_1(self):
         v = votation.votation_dto()
         v.votation_description = 'Guar automated test ' + str(random.randint(1,500))
         v.votation_type = 'random'
-        v.promoter_user_id = 2
+        v.promoter_user.user_id = 2
         v.begin_date = '2018-01-01'
         v.end_date = '2018-01-15'
         v.votation_status = 1
@@ -62,18 +66,20 @@ class guarantor_test(unittest.TestCase):
         g.votation_id = v.votation_id
         g.u.user_id = 3
         g.hash_ok = 0
+        g.passphrase_ok = 0
         guarantor.insert_dto(g)
         g = guarantor.guarantor_dto()
         g.votation_id = v.votation_id
         g.u.user_id = 6
         g.hash_ok = 1
+        g.passphrase_ok = 0
         guarantor.insert_dto(g)
         self.assertFalse(guarantor.guarantors_hash_complete(v.votation_id))
     def test_hash_complete_no_2(self):
         v = votation.votation_dto()
         v.votation_description = 'Guar automated test ' + str(random.randint(1,500))
         v.votation_type = 'random'
-        v.promoter_user_id = 2
+        v.promoter_user.user_id = 2
         v.begin_date = '2018-01-01'
         v.end_date = '2018-01-15'
         v.votation_status = 1
@@ -82,11 +88,13 @@ class guarantor_test(unittest.TestCase):
         g.votation_id = v.votation_id
         g.u.user_id = 1
         g.hash_ok = 1
+        g.passphrase_ok = 0
         guarantor.insert_dto(g)
         g = guarantor.guarantor_dto()
         g.votation_id = v.votation_id
         g.u.user_id = 3
         g.hash_ok = 0
+        g.passphrase_ok = 0
         guarantor.insert_dto(g)
         self.assertFalse(guarantor.guarantors_hash_complete(v.votation_id))
 

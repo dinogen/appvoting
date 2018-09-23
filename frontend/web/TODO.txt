@@ -1,10 +1,14 @@
 TODO
 ----
 in votation detail, created by should be the name
+
+TO COMMIT
+---------
 put an user object in votation_dto
- 
-DONE
-----
+
+
+COMMITTED
+---------
 if votation status not 0, remove "be a candidate".
 if no candidates and no guar, then no button start the election 
 

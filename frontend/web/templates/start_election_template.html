@@ -1,5 +1,5 @@
 {% extends "base_template.html" %} {% block body %} 
-{% if current_user.u.user_id == v.promoter_user_id %} 
+{% if current_user.u.user_id == v.promoter_user.user_id %} 
     The election is
     started:
     <div>{{v.votation_description}}</div>
