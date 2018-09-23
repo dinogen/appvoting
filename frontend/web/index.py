@@ -92,6 +92,7 @@ def be_a_candidate_confirm():
     app.logger.info(o)
     o.votation_id = votation_id
     o.u.user_id = current_user.u.user_id
+    o.passphrase_ok = 0
     error = candidate.validate_dto(o)
     if error == 0:
         candidate.insert_dto(o)
@@ -109,6 +110,8 @@ def be_a_guarantor_confirm():
     #app.logger.info(o)
     o.votation_id = votation_id
     o.u = current_user.u
+    o.hash_ok = 0
+    o.passphrase_ok = 0
     error = guarantor.validate_dto(o)
     if error == 0:
         guarantor.insert_dto(o)

@@ -13,16 +13,24 @@
             </div>
             <div class="col-4">{{v.votation_description}}</div>
             <div class="col-3">{{states[v.votation_status]}} ({{v.votation_status}})</div>
-            <div class="col-2">
-                <a href="/be_a_candidate/{{v.votation_id}}">Be a candidate</a>
-            </div>
+            {% if v.votation_status == 0 %}
+                <div class="col-2">
+                    <a href="/be_a_candidate/{{v.votation_id}}">Be a candidate</a>
+                </div>
+            {% else %}
+                <div class="col-2">&nbsp;</div>
+            {% endif %}
         </div>
         <div class="row">
             <div class="col-4">Starts at {{v.begin_date}}</div>
             <div class="col-4">Ends at {{v.end_date}}</div>
-            <div class="col-2">
-                <a href="/be_a_guarantor/{{v.votation_id}}">Be a guarantor</a>
-            </div>
+            {% if v.votation_status == 0 %}
+                <div class="col-2">
+                    <a href="/be_a_guarantor/{{v.votation_id}}">Be a guarantor</a>
+                </div>
+            {% else %}
+                <div class="col-2">&nbsp;</div>
+            {% endif %}
         </div>
     </div>
     {% endfor %}

@@ -2,8 +2,8 @@ PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 CREATE TABLE voting_user (
     user_id integer primary key autoincrement,
-    user_name text unique,
-    pass_word text
+    user_name text unique not null,
+    pass_word text not null
 );
 INSERT INTO voting_user VALUES(1,'aldo','aldo');
 INSERT INTO voting_user VALUES(2,'beppe','beppe');
@@ -14,12 +14,12 @@ INSERT INTO voting_user VALUES(6,'fabio','fabio');
 CREATE TABLE votation
 (
     votation_id integer primary key autoincrement,
-    promoter_user_id integer,
-    votation_description text unique,
-    begin_date date,
-    end_date date,
-    votation_type text,
-    votation_status integer
+    promoter_user_id integer not null,
+    votation_description text unique not null,
+    begin_date date not null,
+    end_date date not null,
+    votation_type text not null,
+    votation_status integer not null
 );
 INSERT INTO votation VALUES(1,1,'votation test 1','2018-10-01','2018-10-30','random',0);
 INSERT INTO votation VALUES(2,1,'votation test 2','2018-10-01','2018-10-30','random',0);
@@ -29,8 +29,8 @@ CREATE TABLE guarantor
 (
     votation_id integer,
     user_id integer,
-    passphrase_ok integer,
-    hash_ok integer,
+    passphrase_ok integer not null,
+    hash_ok integer not null,
     primary key (votation_id, user_id)
 );
 INSERT INTO guarantor VALUES(2,5,0,0);
@@ -43,7 +43,7 @@ CREATE TABLE candidate
 (
     votation_id integer,
     user_id integer,
-    passphrase_ok integer,
+    passphrase_ok integer not null,
     primary key (votation_id, user_id)
 );
 INSERT INTO candidate VALUES(2,2,0);
