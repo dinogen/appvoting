@@ -47,7 +47,9 @@ class test_confirm_passphrase(unittest.TestCase):
         self.assertTrue(backend.candidate_send_passphrase(999,3,"ciao"))
         self.assertTrue(backend.candidate_send_passphrase(999,2,"ciao"))
         self.assertTrue(backend.candidate_send_passphrase(999,1,"ciao"))
+        self.assertTrue(backend.guarantor_confirm_passphrase(999,2,"ciao"))
         self.assertTrue(backend.guarantor_confirm_passphrase(999,1,"ciao"))
+        self.assertTrue(backend.guarantor_confirm_passphrase(999,3,"ciao"))
 
 
 
