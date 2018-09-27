@@ -59,6 +59,14 @@
         {% endif %}
     </div>
     {% endfor %}
+    {% if v.votation_status == 6 %}
+        <h3>Result of Election</h3>
+        <div>The election is failed.</div>
+    {% endif %}
+    {% if v.votation_status == 5 %}
+        <h3>Result of Election</h3>
+        <div>The winner is: Roky Balboa</div>
+    {% endif %}
     
 </div>
 {% endblock %}
