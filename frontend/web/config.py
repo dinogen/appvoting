@@ -1,1 +1,5 @@
-DBPATH = "/opt/voting/voting.sqlite3.db"
+import os.path
+BASEPATH = "/opt/voting"
+DBPATH = os.path.join(BASEPATH, "voting.sqlite3.db")
+BINPATH = os.path.join(BASEPATH, "bin")
+ELECTIONPATH = os.path.join(BASEPATH,"elections")
