@@ -11,24 +11,42 @@ class candidate_dto:
         self.votation_id = None
         self.u = user.user_dto()
         self.passphrase_ok = None
+        self.order_n = None
 
 def load_candidate_by_votation(votation_id):
     """Returns a candidate_dto array"""
     ar = []
     conn = dbmanager.get_connection()
     c = conn.cursor()
-    c.execute("select * from candidate c where c.votation_id = ?", (votation_id,) )
+    c.execute("select * from candidate c where c.votation_id = ? order by order_n", (votation_id,) )
     row = c.fetchone()
     while row:
         o = candidate_dto()
         o.votation_id = row['votation_id']
         o.passphrase_ok = row['passphrase_ok']
+        o.order_n = row['order_n']
         o.u = user.load_user_by_id(row['user_id'])
         ar.append(o)
         row = c.fetchone()
     c.close()
     conn.close()
     return ar
+
+def load_candidate(votation_id,user_id):
+    """Returns a candidate_dto """
+    conn = dbmanager.get_connection()
+    c = conn.cursor()
+    c.execute("select * from candidate c where c.votation_id = ? and c.user_id = ?", (votation_id,user_id) )
+    row = c.fetchone()
+    o = candidate_dto()
+    o.votation_id = row['votation_id']
+    o.passphrase_ok = row['passphrase_ok']
+    o.order_n = row['order_n']
+    o.u = user.load_user_by_id(row['user_id'])
+    ar.append(o)
+    c.close()
+    conn.close()
+    return o
 
 def check_for_duplicate(o):
     """Returns true/false"""
@@ -49,7 +67,15 @@ def insert_dto(o):
     c = conn.cursor()
     c.execute("""insert into candidate(
                     votation_id, 
-                    user_id, passphrase_ok) values(?,?,?)""",(o.votation_id, o.u.user_id,o.passphrase_ok) )
+                    user_id, passphrase_ok,order_n) select ?,?,0,count(*)+1 from candidate where votation_id = ?""",(o.votation_id, o.u.user_id,o.votation_id) )
+    c.close()
+    conn.close()
+
+def delete_dto(o):
+    """Delete the candidate_dto from the DB"""   
+    conn = dbmanager.get_connection()
+    c = conn.cursor()
+    c.execute("delete from candidate where votation_id = ? and user_id = ?", (o.votation_id,o.u.user_id) )
     c.close()
     conn.close()
 
@@ -59,8 +85,7 @@ error_messages = [
     "Votation undefined", \
     "The user id is invalid", \
     "The votation id is invalid", \
-    "Duplicate record",
-    "Passphrase_ok not valid"
+    "Duplicate record", \
 ]
         
 def validate_dto(o):
@@ -83,9 +108,6 @@ def validate_dto(o):
     if result==0:
         if check_for_duplicate(o):
             result = 5
-    if result==0:
-        if o.passphrase_ok == None:
-            result = 6
     return result
             
 def set_passphrase_ok(user_id,votation_id):

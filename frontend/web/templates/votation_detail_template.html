@@ -67,6 +67,13 @@
         <h3>Result of Election</h3>
         <div>The winner is: Roky Balboa</div>
     {% endif %}
-    
+    {% if v.votation_status > 0 %}
+        <h3>Status</h3>
+        <div class="container">
+            {% for row in state_array %}
+            <code>{{ row }}</code><br / >
+        {% endfor %}    
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

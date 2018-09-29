@@ -2,6 +2,7 @@ import unittest
 import candidate
 import user
 import votation
+import random
 
 class candidate_test(unittest.TestCase):
     def test_validate_1(self):
@@ -23,12 +24,51 @@ class candidate_test(unittest.TestCase):
         o.votation_id = 1
         o.u.user_id = 1
         o.passphrase_ok = 0
+        candidate.delete_dto(o)
         self.assertEqual(0,candidate.validate_dto(o))
     def test_validate_5(self):
         o = candidate.candidate_dto()
         o.votation_id = 999 # don't exist
         o.u.user_id = 1
         self.assertEqual(4,candidate.validate_dto(o))
+    def test_insert_1(self):
+        v = votation.votation_dto()
+        v.votation_description = 'Cand automated test ' + str(random.randint(1,500))
+        v.votation_type = 'random'
+        v.promoter_user.user_id = 1
+        v.begin_date = '2018-01-01'
+        v.end_date = '2018-01-15'
+        v.votation_status = 1
+        votation.insert_votation_dto(v)
+        o = candidate.candidate_dto()
+        o.votation_id = v.votation_id
+        o.u.user_id = 1
+    def test_load_1(self):
+        v = votation.votation_dto()
+        v.votation_description = 'Guar automated test ' + str(random.randint(1,500))
+        v.votation_type = 'random'
+        v.promoter_user.user_id = 1
+        v.begin_date = '2018-01-01'
+        v.end_date = '2018-01-15'
+        v.votation_status = 1
+        votation.insert_votation_dto(v)
+
+        o1 = candidate.candidate_dto()
+        o1.votation_id = v.votation_id
+        o1.u.user_id = 1
+        o2 = candidate.candidate_dto()
+        o2.votation_id = v.votation_id
+        o2.u.user_id = 2
+
+        self.assertEqual(0,candidate.validate_dto(o1))
+        self.assertEqual(0,candidate.validate_dto(o2))
+        candidate.insert_dto(o1)
+        candidate.insert_dto(o2)
+
+        ar = candidate.load_candidate_by_votation(v.votation_id)
+        self.assertEqual(2,len(ar))
+        self.assertEqual(1,ar[0].order_n)
+        self.assertEqual(2,ar[1].order_n)
 
 if __name__ == '__main__':
     unittest.main()

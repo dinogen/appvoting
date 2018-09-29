@@ -12,19 +12,40 @@ class guarantor_dto:
         self.u = user.user_dto()
         self.hash_ok = None
         self.passphrase_ok = None
+        self.order_n = None
+
+
+def load_guarantor(votation_id, user_id):
+    """Returns a guarantor_dto"""
+    conn = dbmanager.get_connection()
+    c = conn.cursor()
+    c.execute("select * from guarantor c where c.votation_id = ? and user_id = ?", (votation_id,user_id) )
+    row = c.fetchone()
+    g = guarantor_dto()
+    g.votation_id = row['votation_id'] 
+    g.hash_ok = row['hash_ok'] 
+    g.passphrase_ok = row['passphrase_ok'] 
+    g.order_n = row['order_n'] 
+    g.u = user.load_user_by_id(row['user_id'])
+    c.close()
+    conn.close()
+    return g
+
+
 
 def load_guarantor_by_votation(votation_id):
     """Returns a guarantor_dto array"""
     ar = []
     conn = dbmanager.get_connection()
     c = conn.cursor()
-    c.execute("select * from guarantor c where c.votation_id = ?", (votation_id,) )
+    c.execute("select * from guarantor c where c.votation_id = ? order by order_n", (votation_id,) )
     row = c.fetchone()
     while row:
         g = guarantor_dto()
         g.votation_id = row['votation_id'] 
         g.hash_ok = row['hash_ok'] 
         g.passphrase_ok = row['passphrase_ok'] 
+        g.order_n = row['order_n'] 
         g.u = user.load_user_by_id(row['user_id'])
         ar.append(g)
         row = c.fetchone()
@@ -51,7 +72,16 @@ def insert_dto(o):
     c = conn.cursor()
     c.execute("""insert into guarantor(
                     votation_id, 
-                    user_id, hash_ok, passphrase_ok) values(?,?,?,?)""",(o.votation_id, o.u.user_id,o.hash_ok,o.passphrase_ok) )
+                    user_id, hash_ok, passphrase_ok,order_n) 
+                    select ?,?,0,0,count(*)+1 from guarantor a where a.votation_id = ?""",(o.votation_id, o.u.user_id,o.votation_id) )
+    c.close()
+    conn.close()
+
+def delete_dto(o):
+    """delete guarantor_dto """   
+    conn = dbmanager.get_connection()
+    c = conn.cursor()
+    c.execute("delete from guarantor where votation_id = ? and user_id = ?",(o.votation_id, o.u.user_id) )
     c.close()
     conn.close()
 
@@ -61,10 +91,7 @@ error_messages = [
     "Votation undefined", \
     "The user id is invalid", \
     "The votation id is invalid", \
-    "Duplicate record",
-    "Hash_ok is null",
-    "Passphrase_ok is null"
-]
+    "Duplicate record"]
         
 def validate_dto(o):
     """Validate data for writing in DB. Returns error code, 0 on success"""
@@ -86,12 +113,6 @@ def validate_dto(o):
     if result==0:
         if check_for_duplicate(o):
             result = 5
-    if result==0:
-        if o.hash_ok == None:
-            result = 6
-    if result==0:
-        if o.passphrase_ok == None:
-            result = 7
     return result
             
 def set_hash_ok(user_id,votation_id):

@@ -126,8 +126,10 @@ def votation_detail(votation_id):
     v = votation.load_votation_by_id(votation_id)
     candidates_array = candidate.load_candidate_by_votation(votation_id)
     guarantors_array = guarantor.load_guarantor_by_votation(votation_id)
+    state_array = backend.election_state(votation_id)
     return render_template('votation_detail_template.html', pagetitle="Votation detail", \
-    v=v, candidates_array=candidates_array, guarantors_array=guarantors_array,states=votation.states)
+         v=v, candidates_array=candidates_array, guarantors_array=guarantors_array, \
+         states=votation.states,state_array=state_array)
 
 @app.route("/start_election/<int:votation_id>")
 @login_required
@@ -153,24 +155,26 @@ def send_passphrase():
     v = votation.load_votation_by_id(votation_id)
     u = current_user.u
     if v.votation_status == votation.STATUS_WAIT_FOR_GUAR_HASHES:
+        g = guarantor.load_guarantor(v.votation_id, u.user_id)
         # TODO scramble the key in the javascript
         # TODO handle this with ajax
-        hash_key = "bla bla bla" # TODO in the javascript
         # TODO error handling
-        backend.guarantor_send_hash(votation_id, u.user_id, hash_key)
+        backend.guarantor_send_hash(votation_id, g.order_n, passphrase)
         message = "Guarantor, your passphrase was registered."
         guarantor.set_hash_ok(u.user_id,votation_id)
         # check if every guarantors has sent the hash
         if guarantor.guarantors_hash_complete(votation_id):
             votation.update_status(votation_id,votation.STATUS_WAIT_FOR_CAND_KEYS)
     if v.votation_status == votation.STATUS_WAIT_FOR_CAND_KEYS:
-        backend.candidate_send_passphrase(votation_id,u.user_id,passphrase)
+        c = candidate.load_candidate(v.votation_id, u.user_id)
+        backend.candidate_send_passphrase(votation_id,c.order_n,passphrase)
         message = "Candidate, your passphrase was registered."
         candidate.set_passphrase_ok(u.user_id,votation_id)
         if candidate.candidates_passphrases_complete(votation_id):
             votation.update_status(votation_id,votation.STATUS_WAIT_FOR_GUAR_KEYS)
     if v.votation_status == votation.STATUS_WAIT_FOR_GUAR_KEYS:
-        backend.guarantor_confirm_passphrase(votation_id, u.user_id, passphrase)
+        g = guarantor.load_guarantor(v.votation_id, u.user_id)
+        backend.guarantor_confirm_passphrase(votation_id, g.order_n, passphrase)
         message = "Guarantor, your passphrase was confirmed."
         guarantor.set_passphrase_ok(u.user_id,votation_id)
         if guarantor.guarantors_passphrase_complete(votation_id):

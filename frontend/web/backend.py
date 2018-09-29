@@ -85,3 +85,9 @@ def guarantor_confirm_passphrase(votation_id, guar_n, passphrase):
     else:
         return False
 
+def election_state(votation_id):
+    p1 = election_dir(votation_id)
+    cp = sp.run([os.path.join(config.BINPATH, "State"), p1], stdout=sp.PIPE)
+    s =  cp.stdout.decode('utf-8')
+    ar = s.split('\n')
+    return ar
