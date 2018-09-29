@@ -1,0 +1,46 @@
+eVoting software has three main parts: backend, frontend and database.
+* Backend directories:
+/opt/voting/bin
+    Close  
+    Creation  
+    Hash  
+    Start  
+    State  
+    Vote
+/opt/voting/elections
+
+* Database
+/opt/voting/voting.sqlite3.db
+
+* Frontend 
+/var/www/voting/frontend/web/ 
+    backend.py         
+    votation.py
+    candidate.py       
+    index.py           
+    voting.wsgi
+    config.py          
+    dbmanager.py       
+    user.py
+    guarantor.py       
+    templates/   
+        base_template.html                    
+        logout_template.html
+        be_a_candidate_confirm_template.html  
+        start_election_template.html
+        be_a_candidate_template.html          
+        thank_you_template.html
+        be_a_guarantor_confirm_template.html  
+        votation_detail_template.html
+        be_a_guarantor_template.html          
+        votation_list_template.html
+        index_template.html                   
+        votation_propose_template.html
+        login_template.html
+    static/
+        bootstrap-4.1.3-dist/
+            ... bootstrap-4 files
+        img/
+            heart.svg  
+            pencil.svg
+           
