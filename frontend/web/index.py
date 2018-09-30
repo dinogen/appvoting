@@ -184,7 +184,7 @@ def unauthorized():
 
 @app.route("/version")
 def print_version():
-    return render_template('version_template.html', pagetitle="Thank you", version=os.environ['version'])
+    return render_template('version_template.html', pagetitle="Thank you", version=os.environ['voting_version'])
   
    
 
