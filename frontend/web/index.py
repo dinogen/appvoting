@@ -181,5 +181,11 @@ def send_passphrase():
 def unauthorized():
     return redirect(url_for('login'))
 
+
+@app.route("/version")
+def print_version():
+    return os.environ['version'];
+   
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0') 
