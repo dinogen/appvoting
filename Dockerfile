@@ -18,5 +18,5 @@ COPY frontend/web/ /app
 COPY frontend/web/index.py /app/main.py
 COPY frontend/database/ /opt/voting
 ARG version
-ENV voting_version=version
+ENV voting_version=$version
 VOLUME /opt/voting
