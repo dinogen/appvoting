@@ -65,7 +65,7 @@ class test_status(unittest.TestCase):
         self.assertTrue(backend.guarantor_confirm_passphrase(999,2,"ciao"))
         self.assertTrue(backend.guarantor_confirm_passphrase(999,1,"ciao"))
         self.assertTrue(backend.guarantor_confirm_passphrase(999,3,"ciao"))
-        ar = backend.election_status(999)
+        ar = backend.election_state(999)
         i = 0
         for s in ar:
             i = i + 1

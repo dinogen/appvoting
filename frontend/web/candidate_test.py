@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import unittest
 import candidate
 import user
@@ -69,6 +70,28 @@ class candidate_test(unittest.TestCase):
         self.assertEqual(2,len(ar))
         self.assertEqual(1,ar[0].order_n)
         self.assertEqual(2,ar[1].order_n)
+
+    def test_load_2(self):
+        v = votation.votation_dto()
+        v.votation_description = 'Guar automated test ' + str(random.randint(1,500))
+        v.votation_type = 'random'
+        v.promoter_user.user_id = 1
+        v.begin_date = '2018-01-01'
+        v.end_date = '2018-01-15'
+        v.votation_status = 1
+        votation.insert_votation_dto(v)
+
+        o1 = candidate.candidate_dto()
+        o1.votation_id = v.votation_id
+        o1.u.user_id = 1
+        self.assertEqual(0,candidate.validate_dto(o1))
+        candidate.insert_dto(o1)
+
+        c = candidate.load_candidate(o1.votation_id, o1.u.user_id)
+        self.assertEqual(o1.votation_id, c.votation_id)
+        self.assertEqual(o1.u.user_id, c.u.user_id)
+        self.assertEqual(1, c.order_n)
+        self.assertEqual(0, c.passphrase_ok)
 
 if __name__ == '__main__':
     unittest.main()

@@ -44,9 +44,7 @@ def guarantor_send_hash(votation_id, guar_n, passphrase):
     p1 = election_dir(votation_id)
     p2 = str(guar_n)
     p3 = hexstring
-    print (p1,p2,p3)
     cp2 = sp.run([os.path.join(config.BINPATH, "Start"), p1, p2, p3], stdout=sp.PIPE)
-    print("Start: "+ str(cp2.stdout))
     control_string = "Key of guarantor {} set".format(guar_n)
     if cp2.stdout.decode('utf-8').startswith(control_string):
         return True
@@ -60,9 +58,7 @@ def candidate_send_passphrase(votation_id, cand_n, passphrase):
     p1 = election_dir(votation_id)
     p2 = str(cand_n)
     p3 = hexword
-    print (p1,p2,p3)
     cp2 = sp.run([os.path.join(config.BINPATH, "Vote"), p1, p2, p3], stdout=sp.PIPE)
-    print("Vote: "+ str(cp2.stdout))
     control_string = "Vote of candidate {} set".format(cand_n)
     if cp2.stdout.decode('utf-8').startswith(control_string):
         return True
@@ -76,9 +72,7 @@ def guarantor_confirm_passphrase(votation_id, guar_n, passphrase):
     p1 = election_dir(votation_id)
     p2 = str(guar_n)
     p3 = hexword
-    print (p1,p2,p3)
     cp2 = sp.run([os.path.join(config.BINPATH, "Close"), p1, p2, p3], stdout=sp.PIPE)
-    print("Close: " + str(cp2.stdout))
     control_string = "Key of guarantor {} set".format(guar_n)
     if cp2.stdout.decode('utf-8').startswith(control_string):
         return True

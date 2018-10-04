@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import unittest
 import votation
 import random
@@ -13,7 +14,7 @@ class votation_test(unittest.TestCase):
         self.assertEqual(1, v1.promoter_user.user_id)
         self.assertEqual('2018-10-01', v1.begin_date)
         self.assertEqual('2018-10-30', v1.end_date)
-        self.assertEqual(0,v1.votation_status)
+        self.assertEqual(2,v1.votation_status)
         
     def test_insert(self):
         v = votation.votation_dto()

@@ -43,7 +43,6 @@ def load_candidate(votation_id,user_id):
     o.passphrase_ok = row['passphrase_ok']
     o.order_n = row['order_n']
     o.u = user.load_user_by_id(row['user_id'])
-    ar.append(o)
     c.close()
     conn.close()
     return o

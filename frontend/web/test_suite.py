@@ -1,9 +1,10 @@
+#!/usr/bin/env python3
 import unittest
 import user_test
 import votation_test
 import candidate_test
 import guarantor_test
-import test_backend
+import backend_test
 
 test_suite = unittest.TestSuite()
 test_suite.addTest(unittest.makeSuite(user_test.user_test))
