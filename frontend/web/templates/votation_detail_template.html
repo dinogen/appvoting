@@ -15,16 +15,16 @@
         <div>
             {% if v.votation_status == 2 and current_user.u.user_id == c.u.user_id %}
             {% if c.passphrase_ok == 1 %}
-                {{c.u.user_name}} (Passphrase Sent)
+                {{c.order_n}}. {{c.u.user_name}} (Passphrase Sent)
             {% else %}
                 <form action="/send_passphrase" method="POST">
-                    {{c.u.user_name}} <input type="text" id="passphrase" name="passphrase">
+                    {{c.order_n}}. {{c.u.user_name}} <input type="text" id="passphrase" name="passphrase">
                     <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}">
                     <input type="submit" value="Send passphrase" class="btn btn-primary" />
                 </form>        
             {% endif %}
         {% else %}
-            {{c.u.user_name}} {% if c.passphrase_ok == 1 %} (Passphrase Sent) {% endif %}
+            {{c.order_n}}. {{c.u.user_name}} {% if c.passphrase_ok == 1 %} (Passphrase Sent) {% endif %}
         {% endif %}
         </div>
 {% endfor %}
