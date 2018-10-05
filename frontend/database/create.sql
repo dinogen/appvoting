@@ -32,35 +32,37 @@ CREATE TABLE guarantor
     user_id integer,
     passphrase_ok integer not null,
     hash_ok integer not null,
+    order_n integer,
     primary key (votation_id, user_id)
 );
-INSERT INTO guarantor VALUES(2,5,0,0);
-INSERT INTO guarantor VALUES(3,5,0,0);
-INSERT INTO guarantor VALUES(4,5,0,0);
-INSERT INTO guarantor VALUES(2,6,0,0);
-INSERT INTO guarantor VALUES(3,6,0,0);
-INSERT INTO guarantor VALUES(4,6,0,0);
-INSERT INTO guarantor VALUES(5,5,0,1);
-INSERT INTO guarantor VALUES(5,6,0,1);
+INSERT INTO guarantor VALUES(2,5,0,0,1);
+INSERT INTO guarantor VALUES(2,6,0,0,2);
+INSERT INTO guarantor VALUES(3,5,0,0,1);
+INSERT INTO guarantor VALUES(3,6,0,0,2);
+INSERT INTO guarantor VALUES(4,6,0,0,1);
+INSERT INTO guarantor VALUES(4,5,0,0,2);
+INSERT INTO guarantor VALUES(5,5,0,1,1);
+INSERT INTO guarantor VALUES(5,6,0,1,2);
 CREATE TABLE candidate
 (
     votation_id integer,
     user_id integer,
     passphrase_ok integer not null,
+    order_n integer,
     primary key (votation_id, user_id)
 );
-INSERT INTO candidate VALUES(2,2,0);
-INSERT INTO candidate VALUES(3,2,0);
-INSERT INTO candidate VALUES(4,2,0);
-INSERT INTO candidate VALUES(2,3,0);
-INSERT INTO candidate VALUES(3,3,0);
-INSERT INTO candidate VALUES(4,3,0);
-INSERT INTO candidate VALUES(2,4,0);
-INSERT INTO candidate VALUES(3,4,0);
-INSERT INTO candidate VALUES(4,4,0);
-INSERT INTO candidate VALUES(5,2,1);
-INSERT INTO candidate VALUES(5,3,1);
-INSERT INTO candidate VALUES(5,4,1);
+INSERT INTO candidate VALUES(2,2,0,1);
+INSERT INTO candidate VALUES(2,3,0,2);
+INSERT INTO candidate VALUES(2,4,0,3);
+INSERT INTO candidate VALUES(3,2,0,1);
+INSERT INTO candidate VALUES(3,3,0,2);
+INSERT INTO candidate VALUES(3,4,0,3);
+INSERT INTO candidate VALUES(4,2,0,1);
+INSERT INTO candidate VALUES(4,3,0,2);
+INSERT INTO candidate VALUES(4,4,0,3);
+INSERT INTO candidate VALUES(5,2,1,1);
+INSERT INTO candidate VALUES(5,3,1,2);
+INSERT INTO candidate VALUES(5,4,1,3);
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('voting_user',6);
 INSERT INTO sqlite_sequence VALUES('votation',5);
