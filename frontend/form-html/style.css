@@ -1,0 +1,87 @@
+@charset "UTF-8";
+/* CSS Document */
+
+@font-face {
+    font-family: 'Fedra Mono';
+    src: url('fonts/FedraMono-Book.woff2') format('woff2'),
+        url('fonts/FedraMono-Book.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Fedra Sans';
+    src: url('fonts/FedraSansBook.woff2') format('woff2'),
+        url('fonts/FedraSansBook.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Fedra Sans';
+    src: url('fonts/FedraSansBookItalic.woff2') format('woff2'),
+        url('fonts/FedraSansBookItalic.woff') format('woff');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Fedra Sans';
+    src: url('fonts/FedraSansLightItalic.woff2') format('woff2'),
+        url('fonts/FedraSansLightItalic.woff') format('woff');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Fedra Sans';
+    src: url('fonts/FedraSansLight.woff2') format('woff2'),
+        url('fonts/FedraSansLight.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+
+body{color: #6b685f; margin-top: 0; font-family: 'Fedra Sans';}
+.textCenter{text-align: center;}
+.botton1{background-color: #167788; color: #fff; font-family: 'Fedra Sans'; font-weight: lighter; font-size: 1rem; padding: 10px 20px; border-radius: 10px;}
+a{color: #167788;}
+.col2{width: 20%;}
+.col6{width: 60%;}
+
+/*form*/
+.alert{color: #a1a1a1 !important; font-weight: lighter !important; font-family: 'Fedra Sans' !important;}
+#login, #votationPurpose{text-align: left;}
+input{width: 350px; height: 40px; border-radius: 10px; background-color: #f8f8f8; margin: 15px 0; font-family: 'Fedra Sans'; font-size: 15px; color: #6b685f;}
+#main form{max-width: 356px; margin: 50px auto;}
+label{font-family: 'Fedra Sans';}
+#votationPurpose .beginDate{width: 45%; float: left; margin-right: 15px;}
+#votationPurpose .endDate{width: 45%; float: right;}
+#votationPurpose .beginDate input, #votationPurpose .endDate input{max-width: 168px;}
+
+/*list*/
+.boxList{max-width: 1280px; margin: 0 auto;}
+.boxList h3{text-align: left;}
+.tabVotatioList{width: 100%; text-align: left;}
+.rigaTab{height: 50px; font-weight: lighter; border-bottom: 1px solid;}
+.rigaTab>td{border-bottom: 1px solid #d6d6d6;}
+.intestazioneTab{font-family: 'Fedra Mono'; font-weight: bold; height: 60px;}
+.idVotation{text-align: center; max-width: 80px; border-bottom: none !important;}
+.idVotation>span{border: 2px solid #fade18; padding: 10px; border-radius: 20px;}
+
+/*header*/
+header{background-image: url(images/header_bg.jpeg); margin-left: -15px; margin-right: -15px; background-size: 100% auto; background-repeat: no-repeat; margin-bottom: 50px; height: 164px;}
+#logo{margin-left: 30px; padding-top: 15px; float: left;}
+#logo img{max-width: 100%;}
+#icoAlSito{float: right; text-align: center;}
+#icoAlSito img{max-width: 100%;}
+
+/*menu user*/
+#menuUser{font-family: 'Fedra Mono'; width: 100%; min-height: 1px; margin-bottom: 60px;}
+#menuUser>.menu{float: right; color: #167788; padding-right: 20px;}
+.linkMenu{text-decoration: underline;}
+
+/*message*/
+#message h1, #main h1{font-family: 'Fedra Mono'; font-weight: lighter; color: #6b685f;}
+#message h3, #main h3{font-family: 'Fedra Sans'; color: #6b685f;}
+#message p, #main p{font-family: 'Fedra Mono'; font-weight: lighter; color: #6b685f;}
+#message p>strong, #main p>strong{font-family: 'Fedra Sans'; color: #6b685f;}
