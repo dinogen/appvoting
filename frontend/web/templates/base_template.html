@@ -1,49 +1,38 @@
 <!doctype html>
-<html lang="en">
-
+<html>
 <head>
-    <title>Voting sistem</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="refresh" content="150" />
-    <link rel="shortcut icon" href="/ipa/ui/favicon.ico" type="image/x-icon">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="{{url_for('static', filename='bootstrap-4.1.3-dist/css/bootstrap.min.css')}}">
-
-    <style type="text/css">
-        :root .left_article_cont,
-        :root .adv,
-        :root .ads {
-            display: none !important;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Copernico Spritz Election</title>
+<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='style.css')}}">
 </head>
-
 <body>
-    <div class="container">
-        <img src="https://static.app.copernicani.it/img/cropped-logo_orizzontale_trasparente.png" />
-        <br/> {% if current_user.is_authenticated %} Hi, {{current_user.user_name}}, (
-        <a href="/logout">logout</a>) (
-        <a href="/">Home</a>) 
-        (<a href="/votation_list">Votation list</a>)
-        {% else %} Please,
-        <a href="/login">login</a>
-        {% endif %}
-
-        <div>
-            <h1>Voting system</h1>
-            <h2>{{pagetitle}}</h2>
-            <div>
-                {% block body %}{% endblock %}
+    <!-- header -->
+    <header>
+            <div id="logo" class="col2"><img src="{{url_for('static', filename='images/logo.png')}}" width="320" height="atuo" alt=""/></div>
+            <div id="mainMenu" class="col6"></div>
+            <div id="icoAlSito" class="col2"><a class="ico" href="/" title="vai al sito">
+                <img src="{{url_for('static', filename='images/al-sito.png')}}" width="160" height="auto" alt=""/></a>
             </div>
+    </header>
+    <!-- login bar -->
+	<div id="menuUser">
+        <div class="menu">
+        {% if current_user.is_authenticated %} 
+            <span class="nameUser">Hi {{current_user.user_name}}</span> - <a class="linkMenu" href="/logout" title="Esegui il logout">(logout)</a> <a href="/" title="Torna alla home">(home)</a>
+        {% else %} 
+            <span class="nameUser">Please</span> - 
+            <a class="linkMenu" href="/login" title="Esegui il login">login</a>
+        {% endif %}
         </div>
-    </div>
-    {% if message %}
-    <div class="container">
-        <div class="alert alert-primary" role="alert">{{message}}</div>
-    </div>
+    </div>       
+    <!-- containt  --> 
+    <div id="main" class="textCenter">
+        <h1>{{pagetitle}}</h1>
+        {% block body %}{% endblock %}
+        {% if message %}
+        <p class="alert">{{message}}</p>
     {% endif %}
+    </div>
 </body>
 
 </html>

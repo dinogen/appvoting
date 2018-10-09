@@ -1,38 +1,36 @@
 {% extends "base_template.html" %} {% block body %}
 
-<div class="container">
-    {% for v in votations_array %}
-    {% if v.promoter_user.user_id == current_user.u.user_id %}
-        <div class="container border border-success">
-    {% else %}
-        <div class="container border-bottom">
-    {% endif %}
-        <div class="row">
-            <div class="col-1">
-                <a href="/votation_detail/{{v.votation_id}}">{{v.votation_id}}</a>
-            </div>
-            <div class="col-4">{{v.votation_description}}</div>
-            <div class="col-3">{{states[v.votation_status]}} ({{v.votation_status}})</div>
-            {% if v.votation_status == 0 %}
-                <div class="col-2">
-                    <a href="/be_a_candidate/{{v.votation_id}}">Be a candidate</a>
-                </div>
-            {% else %}
-                <div class="col-2">&nbsp;</div>
-            {% endif %}
-        </div>
-        <div class="row">
-            <div class="col-4">Starts at {{v.begin_date}}</div>
-            <div class="col-4">Ends at {{v.end_date}}</div>
-            {% if v.votation_status == 0 %}
-                <div class="col-2">
-                    <a href="/be_a_guarantor/{{v.votation_id}}">Be a guarantor</a>
-                </div>
-            {% else %}
-                <div class="col-2">&nbsp;</div>
-            {% endif %}
-        </div>
+<div class="boxList">
+    <div style="overflow-x:auto;">
+        <table class="tabVotatioList">
+        <tr class="intestazioneTab">
+            <th class="idVotation">Votation id</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Begin</th>
+            <th>End</th>
+            <th></th>
+        </tr>
+        {% for v in votations_array %}
+        <tr class="rigaTab {% if v.promoter_user.user_id == current_user.u.user_id %}myVote{% endif %}">
+            <td class="idVotation">
+                <a href="/votation_detail/{{v.votation_id}}">
+                    <span>{{v.votation_id}}</span>
+                </a>
+            </td>
+            <td>{{v.votation_description}}</td>
+            <td><span alt="{{states[v.votation_status]}}">{{v.votation_status}}</span></td>
+            <td>{{v.begin_date}}</td>
+            <td>{{v.end_date}}</td>
+            <td>
+                {% if v.votation_status == 0 %}
+                <a href="/be_a_candidate/{{v.votation_id}}">Be a candidate</a><br/>
+                <a href="/be_a_candidate/{{v.votation_id}}">Be a guarantor</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
     </div>
-    {% endfor %}
 </div>
 {% endblock %}

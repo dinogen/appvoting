@@ -1,31 +1,13 @@
 {% extends "base_template.html" %} {% block body %}
 
-
 <h3>Input data about your votation</h3>
-<form action="votation_propose" method="post">
-    <div class="form-group">
-        <label for="votation_description">Description</label>
-        <input type="text" class="form-control" id="votation_description" name="votation_description" value="{{votation_obj.votation_description}}">
-    </div>
-    <div class="form-group">
-        <label for="begin_date">Begin date</label>
-        <input type="date" class="form-control" maxlength="10" id="begin_date" name="begin_date" value="{{votation_obj.begin_date}}">
-    </div>
-    <div class="form-group">
-        <label for="begin_date">End date</label>
-        <input type="date" class="form-control" maxlength="10" id="end_date" name="end_date" value="{{votation_obj.end_date}}">
-    </div>
-    <div class="form-group">
-        <label for="begin_date">Type</label>
-        <select id="votation_type" name="votation_type" class="form-control">
-            <option value="random" selected>Random</option>
-            <option value="majority">Majority</option>
-        </select>
-    </div>
-
-    <div>
-        <input type="submit" value="Save" class="btn btn-primary" />
-    </div>
+<form action="votation_propose" method="post" id="votationPurpose">
+<label>Description:</label><br>
+<input type="text" id="votation_description" name="votation_description"><br>
+<p class="beginDate"><label>Begin date</label>
+    <input type="date" id="begin_date" name="begin_date"></p>
+<p class="endDate"><label>End date</label>
+    <input type="date" id="end_date" name="end_date"></p><br>
+<p class="textCenter"><button class="botton1 signIn" type="submit">save</button></p>
 </form>
-
 {% endblock %}

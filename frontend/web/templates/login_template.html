@@ -1,19 +1,17 @@
-{% extends "base_template.html" %} {% block body %} {% if current_user.is_authenticated %} You are logged as {{ current_user.user_name
-}}. 
+{% extends "base_template.html" %} 
+{% block body %} 
+{% if current_user.is_authenticated %} 
+You are logged as {{ current_user.user_name }}. 
 <div>Maybe you should go to the <a href="/">Main Menu</a></div>
 {% else %}
-<form action="login" method="post">
-  <h2>Please sign in</h2>
-  <div>
-    Username
-    <input type="text" id="user_name" name="user_name" autofocus>
-  </div>
-  <div>
-    Password
-    <input type="password" id="pass_word" name="pass_word">
-  </div>
-  <div>
-    <input type="submit" value="Sign In"/>
-  </div>
-</form>
-{% endif %} {% endblock %}
+<form action="login" method="post" id="login">
+  <h3>Please sign in</h3>
+  <form id="login">
+    <label>Username:</label><br>
+    <input type="text" id="user_name" name="user_name"><br>
+    <label>Password:</label><br>
+    <input type="password" id="pass_word" name="pass_word"><br>
+    <p class="textCenter"><button class="botton1 signIn" type="submit">Sign in</button></p>
+  </form>
+{% endif %} 
+{% endblock %}

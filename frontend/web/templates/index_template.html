@@ -1,7 +1,20 @@
 {% extends "base_template.html" %}
 {% block body %}
+
+
 <h3>Menu</h3>
-<div><a href="/votation_propose">Start a votation</a></div>
-<div><a href="/votation_list">Go to the votation list</a></div>
+<p>
+    <a href="/votation_propose">
+        <img src="{{url_for('static', filename='images/start-votation.png')}}" width="400" height="auto" alt="start votation"/>
+    </a>
+</p>
+<p>
+    <a href="/votation_list">
+        <img src="{{url_for('static', filename='images/go-to-list.png')}}" width="400" height="auto" alt="go ti list"/>
+    </a>
+</p>
+
+
+
 {% endblock %}
     
