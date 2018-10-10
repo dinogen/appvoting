@@ -52,7 +52,7 @@ def votation_propose():
         v.votation_description = request.form['votation_description']
         v.begin_date = request.form['begin_date']
         v.end_date = request.form['end_date']
-        v.votation_type = request.form['votation_type']
+        v.votation_type = votation.TYPE_RANDOM
         v.promoter_user = current_user.u
         v.votation_status = votation.STATUS_WAIT_FOR_CAND_AND_GUAR
         result, message = votation.validate_dto(v)

@@ -18,9 +18,9 @@
 	<div id="menuUser">
         <div class="menu">
         {% if current_user.is_authenticated %} 
-            <span class="nameUser">Hi {{current_user.user_name}}</span> - <a class="linkMenu" href="/logout" title="Esegui il logout">(logout)</a> <a href="/" title="Torna alla home">(home)</a>
+            <span class="nameUser">Benvenuto {{current_user.user_name}}</span> - <a class="linkMenu" href="/logout" title="Esegui il logout">(logout)</a> <a href="/" title="Torna alla home">(home)</a>
         {% else %} 
-            <span class="nameUser">Please</span> - 
+            <span class="nameUser">Fai qui il </span>
             <a class="linkMenu" href="/login" title="Esegui il login">login</a>
         {% endif %}
         </div>
@@ -28,10 +28,10 @@
     <!-- containt  --> 
     <div id="main" class="textCenter">
         <h1>{{pagetitle}}</h1>
-        {% block body %}{% endblock %}
         {% if message %}
-        <p class="alert">{{message}}</p>
-    {% endif %}
+            <p class="alert">{{message}}</p>
+        {% endif %}
+        {% block body %}{% endblock %}
     </div>
 </body>
 

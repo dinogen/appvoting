@@ -32,6 +32,12 @@ label{font-family: 'Lato', sans-serif;}
 .tabVotatioList .myVote{background: rgba(22, 119, 136, 0.8); color: #fff;}
 .tabVotatioList .myVote a{color: #fff;}
 
+/*detail*/
+#main #vDetail{max-width: 400px; margin: 50px auto;}
+#vDetail{text-align: left;}
+#vDetail a{font-weight: bold;}
+span.lab{font-weight: bold;}
+
 /*header*/
 header{background-image: url(images/header_bg.jpeg); margin-left: -15px; margin-right: -15px; background-size: 100% auto; background-repeat: no-repeat; margin-bottom: 50px; height: 164px;}
 #logo{margin-left: 30px; padding-top: 15px; float: left;}

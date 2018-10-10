@@ -28,9 +28,16 @@ label{font-family: 'Lato', sans-serif;}
 .rigaTab>td{border-bottom: 1px solid #d6d6d6; padding: 20px 10px;}
 .intestazioneTab{font-family: 'Noto Sans', sans-serif; font-weight: bold; height: 60px;}
 .idVotation{text-align: center; max-width: 80px; border-bottom: none !important;}
-.idVotation>span{border: 2px solid #fade18; padding: 10px; border-radius: 20px;}
+.idVotation>a>span{border: 2px solid #fade18; padding: 10px; border-radius: 20px;}
 .tabVotatioList .myVote{background: rgba(22, 119, 136, 0.8); color: #fff;}
 .tabVotatioList .myVote a{color: #fff;}
+.idVotation>a:link{text-decoration: none;}
+
+/*detail*/
+#main #vDetail{max-width: 400px; margin: 50px auto;}
+#vDetail{text-align: left;}
+#vDetail a{font-weight: bold;}
+span.lab{font-weight: bold;}
 
 /*header*/
 header{background-image: url(images/header_bg.jpeg); margin-left: -15px; margin-right: -15px; background-size: 100% auto; background-repeat: no-repeat; margin-bottom: 50px; height: 164px;}

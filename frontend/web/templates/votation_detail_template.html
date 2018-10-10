@@ -1,76 +1,73 @@
 {% extends "base_template.html" %} {% block body %}
+<div id="vDetail">
+    <p><span class="lab">Codice Votazione:</span> {{v.votation_id}}</p>
+    <p><span class="lab">Descrizione:</span> {{v.votation_description}}</p>
+    <p><span class="lab">Stato:</span> {{states[v.votation_status]}} ({{v.votation_status}})</p>
+    <p><span class="lab">Avviata da:</span> {{v.promoter_user.user_name}}</p>
+    <p><span class="lab">Inizia il:</span> {{v.begin_date}}</p>
+    <p><span class="lab">Termina il :</span> {{v.end_date}}</p>
+    <!-- <p><span class="lab">Type:</span> {{v.votation_type}}</p> -->
 
-    <div>Id: {{v.votation_id}}</div>
-    <div>Description: {{v.votation_description}}</div>
-    <div>Status: {{states[v.votation_status]}} ({{v.votation_status}})</div>
-    <div>Created by: {{v.promoter_user.user_name}}</div>
-    <div>Begins at: {{v.begin_date}}</div>
-    <div>Ends at: {{v.end_date}}</div>
-    <div>Type: {{v.votation_type}}</div>
-
-{% if current_user.u.user_id == v.promoter_user.user_id and v.votation_status == 0 and candidates_array|length > 0 and guarantors_array|length > 0 %}
-    <div><a href="/start_election/{{v.votation_id}}" class="botton1">Start the Election</a></div>
-{% endif %}
-<div>
-    <h3>Candidates:</h3>
-    {% for c in candidates_array %}
-        <div>
+    {% if current_user.u.user_id == v.promoter_user.user_id and v.votation_status == 0 and candidates_array|length > 0 and guarantors_array|length > 0 %}
+        <p><a href="/start_election/{{v.votation_id}}">Inizia l'elezione</a></p>
+    {% endif %}
+    <h3>Candidati:</h3>
+    <ul>
+        {% for c in candidates_array %}
             {% if v.votation_status == 2 and current_user.u.user_id == c.u.user_id %}
-            {% if c.passphrase_ok == 1 %}
-                {{c.u.user_name}} (Passphrase Sent)
+                {% if c.passphrase_ok == 1 %}
+                    <li>{{c.u.user_name}} (Chiave inviata)</li>
+                {% else %}
+                    <li><form action="/send_passphrase" method="POST">
+                        {{c.u.user_name}} <input type="text" id="passphrase" name="passphrase">
+                        <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}">
+                        <input type="submit" value="Invia Chiave" class="btn btn-primary" />
+                    </form></li>        
+                {% endif %}
             {% else %}
-                <form action="/send_passphrase" method="POST">
-                    {{c.u.user_name}} <input type="text" id="passphrase" name="passphrase">
-                    <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}">
-                    <input type="submit" value="Send passphrase" class="btn btn-primary" />
-                </form>        
+                <li>{{c.u.user_name}} {% if c.passphrase_ok == 1 %} (Chiave inviata) {% endif %}</li>
             {% endif %}
-        {% else %}
-            {{c.u.user_name}} {% if c.passphrase_ok == 1 %} (Passphrase Sent) {% endif %}
-        {% endif %}
-        </div>
-{% endfor %}
+        {% endfor %}
+    </ul>
     
-</div>
-<div>
-    <h3>Guarantors:</h3>
+    <h3>Scrutatori:</h3>
+    <ul>
     {% for g in guarantors_array %}
-    <div>
         {% if v.votation_status == 1 and current_user.u.user_id == g.u.user_id %}
             {% if g.hash_ok == 1 %}
-                {{g.u.user_name}} (Passphrase Sent)
+                <li>{{g.u.user_name}} (Chiave inviata)</li>
             {% else %}
-                <form action="/send_passphrase" method="POST">
+                <li><form action="/send_passphrase" method="POST">
                     {{g.u.user_name}} <input type="text" id="passphrase" name="passphrase">
                     <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}">
-                    <input type="submit" value="Send passphrase" class="btn btn-primary" />
-                </form>        
+                    <input type="submit" value="Invia Chiave" class="btn btn-primary" />
+                </form></li>         
             {% endif %}
         {% elif v.votation_status == 3 and current_user.u.user_id == g.u.user_id %}
             {% if g.passphrase_ok == 1 %}
-                {{g.u.user_name}} (Passphrase Confirmed)
+                <li>{{g.u.user_name}} (Chiave Confermata)</li> 
             {% else %}
-                <form action="/send_passphrase" method="POST">
-                    {{g.u.user_name}} <input type="text" id="passphrase" name="passphrase">
-                    <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}">
-                    <input type="submit" value="Confirm passphrase" class="btn btn-primary" />
-                </form>        
+                <li><form action="/send_passphrase" method="POST">
+                    {{g.u.user_name}} <input type="text" id="passphrase" name="passphrase" />
+                    <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}" />
+                    <input type="submit" value="Conferma la chiave" class="btn btn-primary" />
+                </form> </li>       
             {% endif %}
         {% else %}
-            {{g.u.user_name}} {% if g.passphrase_ok == 1 %} (Passphrase Confirmed) {% endif %}
+            <li>{{g.u.user_name}} {% if g.passphrase_ok == 1 %} (Chiave Confermata) {% endif %}</li>
         {% endif %}
-    </div>
     {% endfor %}
+    </ul>
     {% if v.votation_status == 6 %}
-        <h3>Result of Election</h3>
+        <h3>Risultato della votazione</h3>
         <div>The election is failed.</div>
     {% endif %}
     {% if v.votation_status == 5 %}
-        <h3>Result of Election</h3>
+        <h3>Risultato della votazione</h3>
         <div>The winner is: Roky Balboa</div>
     {% endif %}
     {% if v.votation_status > 0 %}
-        <h3>Status</h3>
+        <h3>Stato della votazione</h3>
         <div class="container">
             {% for row in state_array %}
             <code>{{ row }}</code><br / >
