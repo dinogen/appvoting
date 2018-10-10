@@ -16,10 +16,10 @@
         {% for c in candidates_array %}
             {% if v.votation_status == 2 and current_user.u.user_id == c.u.user_id %}
                 {% if c.passphrase_ok == 1 %}
-                    <li>{{c.u.user_name}} (Chiave inviata)</li>
+                    <li>{{c.u.user_name}}[{{c.order_n}}] (Chiave inviata)</li>
                 {% else %}
                     <li><form action="/send_passphrase" method="POST">
-                        {{c.u.user_name}} <input type="text" id="passphrase" name="passphrase">
+                        {{c.u.user_name}}[{{c.order_n}}] <input type="text" id="passphrase" name="passphrase">
                         <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}">
                         <input type="submit" value="Invia Chiave" class="btn btn-primary" />
                     </form></li>        
@@ -29,6 +29,7 @@
             {% endif %}
         {% endfor %}
     </ul>
+
     
     <h3>Scrutatori:</h3>
     <ul>
