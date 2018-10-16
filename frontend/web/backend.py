@@ -6,8 +6,8 @@ import config
 HEXSTRING_LEN_GUAR = 55
 HEXSTRING_LEN_CAND = 48
 
-MOCK = True
-#MOCK = False
+#MOCK = True
+MOCK = False
 
 def string2hex(key, key_length):
     if key == None:
