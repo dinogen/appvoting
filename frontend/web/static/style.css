@@ -20,6 +20,13 @@ label{font-family: 'Lato', sans-serif;}
 #votationPurpose .endDate{width: 45%; float: right;}
 #votationPurpose .beginDate input, #votationPurpose .endDate input{max-width: 168px;}
 
+/*Start vot*/
+.startVot{background: #fade18; font-size: 1.5em; width: 350px; padding: 18px 20px; color: #6b685f; font-family: 'Lato', sans-serif; font-weight: lighter; border-radius: 5px;}
+.startVot>i{color: #167788; float: left; border: 2px solid #167788; border-radius: 30px; padding: 15px;}
+.goVot{background: #167788; font-size: 1.5em; width: 350px; padding: 18px 20px; color: #fff; font-family: 'Lato', sans-serif; font-weight: lighter; border-radius: 5px;}
+.goVot>i{color: #fade18; float: left; border: 2px solid #fade18; border-radius: 30px; padding: 15px;}
+.textButton{position: relative; top: 10px;}
+
 /*list*/
 .boxList{max-width: 1280px; margin: 0 auto;}
 .boxList h3{text-align: left;}
@@ -28,16 +35,19 @@ label{font-family: 'Lato', sans-serif;}
 .rigaTab>td{border-bottom: 1px solid #d6d6d6; padding: 20px 10px;}
 .intestazioneTab{font-family: 'Noto Sans', sans-serif; font-weight: bold; height: 60px;}
 .idVotation{text-align: center; max-width: 80px; border-bottom: none !important;}
-.idVotation>a>span{border: 2px solid #fade18; padding: 10px; border-radius: 20px;}
+.idVotation>span{border: 2px solid #fade18; padding: 10px; border-radius: 20px;}
 .tabVotatioList .myVote{background: rgba(22, 119, 136, 0.8); color: #fff;}
 .tabVotatioList .myVote a{color: #fff;}
-.idVotation>a:link{text-decoration: none;}
 
 /*detail*/
 #main #vDetail{max-width: 400px; margin: 50px auto;}
 #vDetail{text-align: left;}
 #vDetail a{font-weight: bold;}
 span.lab{font-weight: bold;}
+.candidateList{display: inline-flex;}
+.candidateList .botton1{max-width: 160px; margin-left: 5px; padding-top: 6px;}
+.candidateList .nameV{font-weight: bold; margin-right: 20px; padding-top: 25px;}
+.candidateList input{max-height: 35px;}
 
 /*header*/
 header{background-image: url(images/header_bg.jpeg); margin-left: -15px; margin-right: -15px; background-size: 100% auto; background-repeat: no-repeat; margin-bottom: 50px; height: 164px;}

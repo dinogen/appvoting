@@ -3,18 +3,17 @@
 
 
 <h3>Menu</h3>
-<p>
-    <a href="/votation_propose">
-        <img src="{{url_for('static', filename='images/start-votation.png')}}" width="400" height="auto" alt="Avvia una votazione"/>
-    </a>
-</p>
-<p>
-    <a href="/votation_list">
-        <img src="{{url_for('static', filename='images/go-to-list.png')}}" width="400" height="auto" alt="Vai alla lista delle votazioni"/>
-    </a>
-</p>
-
-
-
+<p><a href="/votation_propose">
+    <button class="startVot">
+        <i class="fa fa-pencil"></i>
+        <span class="textButton">Avvia una votazione</span>
+    </button>
+</a></p>
+<p><a href="/votation_list">
+    <button class="goVot">
+        <i class="fa fa-file-text-o"></i>
+        <span class="textButton">Vai alla lista delle votazioni</span>
+    </button>
+</a></p>
 {% endblock %}
     
