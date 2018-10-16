@@ -16,16 +16,16 @@
         {% for c in candidates_array %}
             {% if v.votation_status == 2 and current_user.u.user_id == c.u.user_id %}
                 {% if c.passphrase_ok == 1 %}
-                    <li  class="candidateList"><span class="nameV">{{c.u.user_name}}</span> [{{c.order_n}}] (Chiave inviata)</li>
+                    <li  ><span >{{c.u.user_name}}</span> [{{c.order_n}}] (Chiave inviata)</li>
                 {% else %}
-                    <li  class="candidateList"><form action="/send_passphrase" method="POST">
-                        <span class="nameV">{{c.u.user_name}}</span> [{{c.order_n}}] <input type="text" id="passphrase" name="passphrase">
+                    <li  ><form action="/send_passphrase" method="POST">
+                        <span >{{c.u.user_name}}</span> [{{c.order_n}}] <input type="text" id="passphrase" name="passphrase">
                         <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}">
-                        <input type="submit" value="Invia Chiave" class="botton1" />
+                        <input type="submit" value="Invia Chiave"  />
                     </form></li>        
                 {% endif %}
             {% else %}
-                <li  class="candidateList"><span class="nameV">{{c.u.user_name}}</span> [{{c.order_n}}] {% if c.passphrase_ok == 1 %} (Chiave inviata) {% endif %}</li>
+                <li  ><span >{{c.u.user_name}}</span> [{{c.order_n}}] {% if c.passphrase_ok == 1 %} (Chiave inviata) {% endif %}</li>
             {% endif %}
         {% endfor %}
     </ul>
@@ -36,26 +36,26 @@
     {% for g in guarantors_array %}
         {% if v.votation_status == 1 and current_user.u.user_id == g.u.user_id %}
             {% if g.hash_ok == 1 %}
-                <li  class="candidateList"><span class="nameV">{{g.u.user_name}}</span> (Chiave inviata)</li>
+                <li  ><span >{{g.u.user_name}}</span> (Chiave inviata)</li>
             {% else %}
-                <li  class="candidateList"><form action="/send_passphrase" method="POST">
-                    <span class="nameV">{{g.u.user_name}}</span> <input type="text" id="passphrase" name="passphrase">
+                <li  ><form action="/send_passphrase" method="POST">
+                    <span >{{g.u.user_name}}</span> <input type="text" id="passphrase" name="passphrase">
                     <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}">
-                    <input type="submit" value="Invia Chiave" class="botton1" />
+                    <input type="submit" value="Invia Chiave"  />
                 </form></li>         
             {% endif %}
         {% elif v.votation_status == 3 and current_user.u.user_id == g.u.user_id %}
             {% if g.passphrase_ok == 1 %}
-                <li  class="candidateList"><span class="nameV">{{g.u.user_name}}</span> (Chiave Confermata)</li> 
+                <li  ><span >{{g.u.user_name}}</span> (Chiave Confermata)</li> 
             {% else %}
-                <li  class="candidateList"><form action="/send_passphrase" method="POST">
-                    <span class="nameV">{{g.u.user_name}}</span> <input type="text" id="passphrase" name="passphrase" />
+                <li  ><form action="/send_passphrase" method="POST">
+                    <span >{{g.u.user_name}}</span> <input type="text" id="passphrase" name="passphrase" />
                     <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}" />
-                    <input type="submit" value="Conferma la chiave" class="botton1" />
+                    <input type="submit" value="Conferma la chiave"  />
                 </form> </li>       
             {% endif %}
         {% else %}
-            <li  class="candidateList"><span class="nameV">{{g.u.user_name}}</span> {% if g.passphrase_ok == 1 %} (Chiave Confermata) {% endif %}</li>
+            <li  ><span >{{g.u.user_name}}</span> {% if g.passphrase_ok == 1 %} (Chiave Confermata) {% endif %}</li>
         {% endif %}
     {% endfor %}
     </ul>
