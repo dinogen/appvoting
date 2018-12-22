@@ -21,11 +21,6 @@ CREATE TABLE votation
     votation_type text not null,
     votation_status integer not null
 );
-INSERT INTO votation VALUES(1,1,'votation test 1','2018-10-01','2018-10-30','random',0);
-INSERT INTO votation VALUES(2,1,'votation test 2','2018-10-01','2018-10-30','random',0);
-INSERT INTO votation VALUES(3,1,'votation test 3','2018-09-21','2018-10-15','random',0);
-INSERT INTO votation VALUES(4,1,'votation test 4','2018-10-03','2018-10-10','random',1);
-INSERT INTO votation VALUES(5,1,'Test guarantors have to confirm','2018-01-01','2018-01-31','random',3);
 CREATE TABLE guarantor
 (
     votation_id integer,
@@ -35,14 +30,6 @@ CREATE TABLE guarantor
     order_n integer,
     primary key (votation_id, user_id)
 );
-INSERT INTO guarantor VALUES(2,5,0,0,1);
-INSERT INTO guarantor VALUES(2,6,0,0,2);
-INSERT INTO guarantor VALUES(3,5,0,0,1);
-INSERT INTO guarantor VALUES(3,6,0,0,2);
-INSERT INTO guarantor VALUES(4,6,0,0,1);
-INSERT INTO guarantor VALUES(4,5,0,0,2);
-INSERT INTO guarantor VALUES(5,5,0,1,1);
-INSERT INTO guarantor VALUES(5,6,0,1,2);
 CREATE TABLE candidate
 (
     votation_id integer,
@@ -51,19 +38,4 @@ CREATE TABLE candidate
     order_n integer,
     primary key (votation_id, user_id)
 );
-INSERT INTO candidate VALUES(2,2,0,1);
-INSERT INTO candidate VALUES(2,3,0,2);
-INSERT INTO candidate VALUES(2,4,0,3);
-INSERT INTO candidate VALUES(3,2,0,1);
-INSERT INTO candidate VALUES(3,3,0,2);
-INSERT INTO candidate VALUES(3,4,0,3);
-INSERT INTO candidate VALUES(4,2,0,1);
-INSERT INTO candidate VALUES(4,3,0,2);
-INSERT INTO candidate VALUES(4,4,0,3);
-INSERT INTO candidate VALUES(5,2,1,1);
-INSERT INTO candidate VALUES(5,3,1,2);
-INSERT INTO candidate VALUES(5,4,1,3);
-DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('voting_user',6);
-INSERT INTO sqlite_sequence VALUES('votation',5);
 COMMIT;

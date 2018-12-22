@@ -8,6 +8,8 @@ RUN mkdir -p /opt/voting
 
 RUN mkdir -p /opt/voting/bin
 RUN mkdir -p /opt/voting/database
+
+RUN rm -fr /opt/voting/elections
 RUN mkdir -p /opt/voting/elections
 run mkdir -p /var/www/voting/frontend/web
 
