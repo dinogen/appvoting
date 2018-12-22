@@ -2,6 +2,12 @@ import dbmanager
 import config
 from flask_login import UserMixin
 
+if config.AUTH_METHOD == 'ldap':
+    import ldap
+    def get_ldap_connection():
+        conn = ldap.initialize(config.LDAP_URL)
+        return conn
+
 class user_dto:
     """This class is a DTO for the database table"""
     def __init__(self):
@@ -18,9 +24,18 @@ class User(UserMixin):
     def get_id(self):
         return str(self.user_name) # must be unicode
     def try_to_authenticate(self, pass_word):
-        if self.u:
-            if pass_word == self.u.pass_word:
-                return True
+        if config.AUTH_METHOD == 'ldap':
+            if self.u:
+                try: 
+                    conn = get_ldap_connection()
+                    conn.simple_bind_s(config.LDAP_BIND.format(self.user_name),pass_word)
+                    return True
+                except:
+                    return False
+        else:
+            if self.u:
+                if pass_word == self.u.pass_word:
+                    return True
         return False
     def is_valid(self):
         return self.u != None
@@ -43,7 +58,6 @@ def load_user_by_id(user_id):
     return u
 
 def load_user_by_username(user_name):
-    """Returns a user_dto object or None"""
     u = None
     conn = dbmanager.get_connection()
     c = conn.cursor()
@@ -56,6 +70,12 @@ def load_user_by_username(user_name):
         u.pass_word = row['pass_word']
     c.close()
     conn.close()
+    if config.AUTH_METHOD == 'ldap':
+        if u == None:
+            u = user_dto()
+            u.user_name = user_name
+            u.pass_word = 'ldap user'
+            insert_user_dto(u)
     return u
 
 def delete_user_by_id(user_id):
