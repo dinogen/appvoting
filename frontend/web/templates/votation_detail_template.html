@@ -8,7 +8,7 @@
     <p><span class="lab">Termina il :</span> {{v.end_date}}</p>
     <!-- <p><span class="lab">Type:</span> {{v.votation_type}}</p> -->
 
-    {% if current_user.u.user_id == v.promoter_user.user_id and v.votation_status == 0 and candidates_array|length > 0 and guarantors_array|length > 0 %}
+    {% if current_user.u.user_id == v.promoter_user.user_id and v.votation_status == 0 and candidates_array|length > 1 and guarantors_array|length > 1 %}
         <p><a href="/start_election/{{v.votation_id}}">Inizia l'elezione</a></p>
     {% endif %}
     <h3>Candidati:</h3>
@@ -16,22 +16,22 @@
         {% for c in candidates_array %}
             {% if v.votation_status == 2 and current_user.u.user_id == c.u.user_id %}
                 {% if c.passphrase_ok == 1 %}
-                    <li  ><span >{{c.u.user_name}}</span> [{{c.order_n}}] (Chiave inviata)</li>
+                    <li  ><span >[Candidato n.{{c.order_n}}] {{c.u.user_name}}</span> (Chiave inviata)</li>
                 {% else %}
                     <li  ><form action="/send_passphrase" method="POST">
-                        <span >{{c.u.user_name}}</span> [{{c.order_n}}] <input type="text" id="passphrase" name="passphrase">
+                        <span >[Candidato n.{{c.order_n}}]{{c.u.user_name}}</span>  <input type="text" id="passphrase" name="passphrase">
                         <input type="hidden" name="votation_id" id="votation_id" value="{{v.votation_id}}">
                         <input type="submit" value="Invia Chiave"  />
                     </form></li>        
                 {% endif %}
             {% else %}
-                <li  ><span >{{c.u.user_name}}</span> [{{c.order_n}}] {% if c.passphrase_ok == 1 %} (Chiave inviata) {% endif %}</li>
+                <li  ><span >[Candidato n.{{c.order_n}}] {{c.u.user_name}}</span>  {% if c.passphrase_ok == 1 %} (Chiave inviata) {% endif %}</li>
             {% endif %}
         {% endfor %}
     </ul>
 
     
-    <h3>Scrutatori:</h3>
+    <h3>Custodi:</h3>
     <ul>
     {% for g in guarantors_array %}
         {% if v.votation_status == 1 and current_user.u.user_id == g.u.user_id %}
@@ -64,13 +64,15 @@
         <div>The election is failed.</div>
     {% endif %}
     {% if v.votation_status == 5 %}
-        <h3>Risultato della votazione</h3>
-        <div>The winner is: Roky Balboa</div>
+        <h3>Classifica della votazione</h3>
+        {% for i in ranking %}
+            <ul><li>Candidato n.{{i}}</li></ul>
+        {% endfor %}    
     {% endif %}
     {% if v.votation_status > 0 %}
         <h3>Stato della votazione</h3>
         <div class="container">
-            {% for row in state_array %}
+        {% for row in state_array %}
             <code>{{ row }}</code><br / >
         {% endfor %}    
         </div>

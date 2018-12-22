@@ -46,7 +46,7 @@ def logout():
 @login_required
 def votation_propose():
     v = votation.get_blank_dto()
-    message = "Please insert data"
+    message = "Inserire i dati"
     if request.method == 'POST':    
         #v.votation_id = request.form['votation_id']
         v.votation_description = request.form['votation_description']
@@ -58,9 +58,9 @@ def votation_propose():
         result, message = votation.validate_dto(v)
         if result:
             if votation.insert_votation_dto(v):
-                message = "Your votation is saved"
+                message = "Votazione salvata"
             else:
-                message = "Error, your votation is not saved"                    
+                message = "Errore: votazone non salvata"                    
     return render_template('votation_propose_template.html', pagetitle="Start a Votation", \
     votation_obj=v, message=message)
 
@@ -88,7 +88,7 @@ def be_a_guarantor(votation_id):
 def be_a_candidate_confirm():
     votation_id = int(request.args.get('votation_id'))
     v = votation.load_votation_by_id(votation_id)
-    message = "Now, you are a candidate"
+    message = "Adesso sei un candidato"
     o = candidate.candidate_dto()
     app.logger.info(o)
     o.votation_id = votation_id
@@ -106,7 +106,7 @@ def be_a_candidate_confirm():
 def be_a_guarantor_confirm():
     votation_id = int(request.args.get('votation_id'))
     v = votation.load_votation_by_id(votation_id)
-    message = "Now, you are a guarantor"
+    message = "Adesso sei un custode."
     o = guarantor.guarantor_dto()
     #app.logger.info(o)
     o.votation_id = votation_id
@@ -124,12 +124,15 @@ def be_a_guarantor_confirm():
 @login_required
 def votation_detail(votation_id):
     v = votation.load_votation_by_id(votation_id)
+    ranking = []
     candidates_array = candidate.load_candidate_by_votation(votation_id)
     guarantors_array = guarantor.load_guarantor_by_votation(votation_id)
     state_array = backend.election_state(votation_id)
-    return render_template('votation_detail_template.html', pagetitle="Votation detail", \
+    if v.votation_status == votation.STATUS_ENDED:
+        ranking = backend.election_ranking(v.votation_id)
+    return render_template('votation_detail_template.html', pagetitle="Dettagli della votazione", \
          v=v, candidates_array=candidates_array, guarantors_array=guarantors_array, \
-         states=votation.states,state_array=state_array)
+         states=votation.states,state_array=state_array,ranking=ranking)
 
 @app.route("/start_election/<int:votation_id>")
 @login_required
@@ -160,7 +163,7 @@ def send_passphrase():
         # TODO handle this with ajax
         # TODO error handling
         backend.guarantor_send_hash(votation_id, g.order_n, passphrase)
-        message = "Guarantor, your passphrase was registered."
+        message = "Custode, la tua chiave è stata registrata."
         guarantor.set_hash_ok(u.user_id,votation_id)
         # check if every guarantors has sent the hash
         if guarantor.guarantors_hash_complete(votation_id):
@@ -168,17 +171,21 @@ def send_passphrase():
     if v.votation_status == votation.STATUS_WAIT_FOR_CAND_KEYS:
         c = candidate.load_candidate(v.votation_id, u.user_id)
         backend.candidate_send_passphrase(votation_id,c.order_n,passphrase)
-        message = "Candidate, your passphrase was registered."
+        message = "Candidato, la tua chiave è stata registrata."
         candidate.set_passphrase_ok(u.user_id,votation_id)
         if candidate.candidates_passphrases_complete(votation_id):
             votation.update_status(votation_id,votation.STATUS_WAIT_FOR_GUAR_KEYS)
     if v.votation_status == votation.STATUS_WAIT_FOR_GUAR_KEYS:
         g = guarantor.load_guarantor(v.votation_id, u.user_id)
-        backend.guarantor_confirm_passphrase(votation_id, g.order_n, passphrase)
-        message = "Guarantor, your passphrase was confirmed."
+        if backend.guarantor_confirm_passphrase(votation_id, g.order_n, passphrase):
+            message = "Custode, la tua chiave è stata confermata."
+        else:
+            message = "Custode, la chiave che hai inserito non è corretta."
         guarantor.set_passphrase_ok(u.user_id,votation_id)
         if guarantor.guarantors_passphrase_complete(votation_id):
             votation.update_status(votation_id,votation.STATUS_CALCULATION)
+            # suspence...
+            votation.update_status(votation_id,votation.STATUS_ENDED)
     return render_template('thank_you_template.html', pagetitle="Thank you", message=message)
 
 @login_manager.unauthorized_handler

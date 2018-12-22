@@ -80,16 +80,48 @@ def guarantor_confirm_passphrase(votation_id, guar_n, passphrase):
     p2 = str(guar_n)
     p3 = hexword
     cp2 = sp.run([os.path.join(config.BINPATH, "Close"), p1, p2, p3], stdout=sp.PIPE)
+    output_string = cp2.stdout.decode('utf-8')
+    print(output_string)
     control_string = "Key of guarantor {} set".format(guar_n)
-    if cp2.stdout.decode('utf-8').startswith(control_string):
+    if output_string.startswith(control_string):
         return True
     else:
         return False
 
 def election_state(votation_id):
     if MOCK: return ["Lorem ipsum dolor sit amet, consectetur adipiscing elit,","sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."]
+    result = []
     p1 = election_dir(votation_id)
     cp = sp.run([os.path.join(config.BINPATH, "State"), p1], stdout=sp.PIPE)
     s =  cp.stdout.decode('utf-8')
     ar = s.split('\n')
-    return ar
+    # search for election result:
+    is_result = False
+    ar_length = len(ar)
+    for r in ar:
+        if "Election result" in r:
+            is_result = True
+    if is_result:
+        result = [ar[ar_length-6],ar[ar_length-5],ar[ar_length-4],ar[ar_length-3],]
+    else:
+        result = [ar[ar_length-4],ar[ar_length-3],]
+
+    return result 
+
+def election_ranking(votation_id):
+    if MOCK: return [1,2,3,4,5,6]
+    result = []
+    p1 = election_dir(votation_id)
+    cp = sp.run([os.path.join(config.BINPATH, "State"), p1], stdout=sp.PIPE)
+    s =  cp.stdout.decode('utf-8')
+    ar = s.split('\n')
+    # search for election result:
+    is_result = False
+    ar_length = len(ar)
+    for r in ar:
+        if is_result and len(r) > 3:
+            v = r.split() # 1 2 CHIAVE
+            result.append(int(v[1]))
+        if "Placement" in r:
+            is_result = True
+    return result 

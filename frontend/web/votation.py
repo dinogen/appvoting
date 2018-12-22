@@ -15,13 +15,13 @@ STATUS_FAILED = 6
 TYPE_RANDOM = 'random'
 TYPE_MAJORITY = 'majority'
 states = [
-    "Waiting for candidates and guarantors",
-    "Waiting for guarantors passphrases",
-    "Waiting for candidates passphrases",
-    "Waiting for guarantors confirming passphrases",
-    "Elaborating, please wait...",
-    "Ended",
-    "Failed",
+    "In preparazione",
+    "Custodi",
+    "Candidati",
+    "Conferma",
+    "Elaborazione",
+    "Terminata",
+    "Fallita",
 ]
 
 
